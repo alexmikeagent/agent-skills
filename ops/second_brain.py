@@ -243,7 +243,14 @@ def update_drive_mirror(required: bool = False) -> Path | None:
     stage_drive_mirror()
     destination.mkdir(parents=True, exist_ok=True)
     run(
-        [RSYNC, "-a", "--delete", f"{DRIVE_STAGING}/", f"{destination}/"],
+        [
+            RSYNC,
+            "-a",
+            "--whole-file",
+            "--delete",
+            f"{DRIVE_STAGING}/",
+            f"{destination}/",
+        ],
         capture=True,
     )
     print(f"[OK] Google Drive mirror updated: {destination}")
