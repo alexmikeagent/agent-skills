@@ -3,13 +3,55 @@
 Quick validation script for skills - minimal version
 """
 
+import json
 import re
 import sys
 from pathlib import Path
 
-import yaml
-
 MAX_SKILL_NAME_LENGTH = 64
+
+
+def parse_scalar(value):
+    value = value.strip()
+    if value.startswith('"') and value.endswith('"'):
+        try:
+            return json.loads(value)
+        except json.JSONDecodeError:
+            return value[1:-1]
+    if value.startswith("'") and value.endswith("'"):
+        return value[1:-1].replace("''", "'")
+    return value
+
+
+def parse_frontmatter(frontmatter_text):
+    """Parse the top-level metadata shape supported by SKILL.md files."""
+    result = {}
+    lines = frontmatter_text.splitlines()
+    index = 0
+    while index < len(lines):
+        line = lines[index]
+        index += 1
+        if not line.strip() or line.lstrip().startswith("#") or line[:1].isspace():
+            continue
+        match = re.match(r"^([A-Za-z0-9_-]+):(?:\s*(.*))?$", line)
+        if not match:
+            raise ValueError(f"Invalid top-level frontmatter line: {line}")
+        key, raw_value = match.groups()
+        raw_value = raw_value or ""
+        if raw_value in {"|", ">"}:
+            block = []
+            while index < len(lines) and (
+                not lines[index].strip() or lines[index][:1].isspace()
+            ):
+                block.append(lines[index].strip())
+                index += 1
+            separator = "\n" if raw_value == "|" else " "
+            result[key] = separator.join(block).strip()
+        elif raw_value:
+            result[key] = parse_scalar(raw_value)
+        else:
+            result[key] = {}
+    return result
 
 
 def validate_skill(skill_path):
@@ -31,11 +73,9 @@ def validate_skill(skill_path):
     frontmatter_text = match.group(1)
 
     try:
-        frontmatter = yaml.safe_load(frontmatter_text)
-        if not isinstance(frontmatter, dict):
-            return False, "Frontmatter must be a YAML dictionary"
-    except yaml.YAMLError as e:
-        return False, f"Invalid YAML in frontmatter: {e}"
+        frontmatter = parse_frontmatter(frontmatter_text)
+    except ValueError as exc:
+        return False, f"Invalid YAML in frontmatter: {exc}"
 
     allowed_properties = {"name", "description", "license", "allowed-tools", "metadata"}
 

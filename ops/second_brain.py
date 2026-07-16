@@ -21,8 +21,24 @@ LOG_DIR = MANAGEMENT / "logs"
 LOCK_DIR = MANAGEMENT / ".snapshot.lock"
 DRIVE_STAGING = MANAGEMENT / ".drive-staging"
 SKILLS_REPO = HOME / "Documents/PERSONAL/Projects/agent-skills"
-SKILLS_TOOL = SKILLS_REPO / "skills/skills-repo-maintenance/scripts/skills_tool.py"
-HEALTH_TOOL = SKILLS_REPO / "skills/vault-health/scripts/vault_health.py"
+INSTALLED_RUNTIME = HOME / "Library/Application Support/Second Brain"
+SCRIPT_DIR = Path(__file__).resolve().parent
+RUNNING_INSTALLED = SCRIPT_DIR.is_relative_to(INSTALLED_RUNTIME)
+LAUNCH_AGENT = "com.amanuel.second-brain-snapshot"
+CANONICAL_SKILLS_TOOL = (
+    SKILLS_REPO / "skills/skills-repo-maintenance/scripts/skills_tool.py"
+)
+CANONICAL_HEALTH_TOOL = SKILLS_REPO / "skills/vault-health/scripts/vault_health.py"
+SKILLS_TOOL = (
+    SCRIPT_DIR / "skills_tool.py"
+    if RUNNING_INSTALLED and (SCRIPT_DIR / "skills_tool.py").is_file()
+    else CANONICAL_SKILLS_TOOL
+)
+HEALTH_TOOL = (
+    SCRIPT_DIR / "vault_health.py"
+    if RUNNING_INSTALLED and (SCRIPT_DIR / "vault_health.py").is_file()
+    else CANONICAL_HEALTH_TOOL
+)
 PYTHON = shutil.which("python3") or "/usr/bin/python3"
 RSYNC = "/usr/bin/rsync"
 MIRROR_EXTENSIONS = {
@@ -284,6 +300,18 @@ def status() -> int:
     print(f"Physical: {VAULT.resolve() if VAULT.exists() else 'unavailable'}")
     print(f"Git metadata: {GIT_DIR}")
     print(f"Google Drive mirror: {find_drive_destination() or 'not mounted'}")
+    print(f"Canonical skills: {SKILLS_REPO / 'skills'}")
+    agents_skills = HOME / ".agents/skills"
+    print(
+        "Global skills: "
+        f"{agents_skills.resolve() if agents_skills.exists() else 'unavailable'}"
+    )
+    launch_target = f"gui/{os.getuid()}/{LAUNCH_AGENT}"
+    launch = run(["launchctl", "print", launch_target], check=False)
+    print(
+        "Background snapshots: "
+        + ("loaded (30-minute interval)" if launch.returncode == 0 else "not loaded")
+    )
     if not GIT_DIR.is_dir() or not git_has_head():
         print("Git: not initialized")
         return 1

@@ -111,23 +111,19 @@ def read_frontmatter_name(skill_dir):
     if not match:
         print("[ERROR] Invalid SKILL.md frontmatter format.")
         return None
-    frontmatter_text = match.group(1)
-
-    import yaml
-
-    try:
-        frontmatter = yaml.safe_load(frontmatter_text)
-    except yaml.YAMLError as exc:
-        print(f"[ERROR] Invalid YAML frontmatter: {exc}")
-        return None
-    if not isinstance(frontmatter, dict):
-        print("[ERROR] Frontmatter must be a YAML dictionary.")
-        return None
-    name = frontmatter.get("name", "")
-    if not isinstance(name, str) or not name.strip():
+    name = ""
+    for line in match.group(1).splitlines():
+        if line.startswith("name:"):
+            name = line.split(":", 1)[1].strip()
+            if name.startswith('"') and name.endswith('"'):
+                name = name[1:-1].replace('\\"', '"').replace("\\\\", "\\")
+            elif name.startswith("'") and name.endswith("'"):
+                name = name[1:-1].replace("''", "'")
+            break
+    if not name:
         print("[ERROR] Frontmatter 'name' is missing or invalid.")
         return None
-    return name.strip()
+    return name
 
 
 def parse_interface_overrides(raw_overrides):

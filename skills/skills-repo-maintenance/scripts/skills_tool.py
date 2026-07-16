@@ -9,6 +9,7 @@ import json
 import shutil
 import subprocess
 import sys
+import tomllib
 from datetime import date
 from pathlib import Path
 
@@ -17,6 +18,7 @@ REPO = Path("/Users/aman-mac-work/Documents/PERSONAL/Projects/agent-skills")
 SKILLS = REPO / "skills"
 RUNTIME = Path("/Users/aman-mac-work/.agents/skills")
 LEGACY = Path("/Users/aman-mac-work/.codex/skills")
+CODEX_CONFIG = Path("/Users/aman-mac-work/.codex/config.toml")
 MIRROR = Path(
     "/Users/aman-mac-work/Documents/PERSONAL/Projects/obsidian-vaults/Second Brain/90 Meta/Skills Mirror"
 )
@@ -60,7 +62,13 @@ def doctor() -> list[str]:
     elif RUNTIME.resolve() != SKILLS.resolve():
         errors.append(f"Runtime path resolves to {RUNTIME.resolve()}, expected {SKILLS.resolve()}")
     if LEGACY.exists():
-        errors.append(f"Legacy skill tree exists: {LEGACY}")
+        unexpected = [path for path in LEGACY.iterdir() if path.name != ".system"]
+        for path in unexpected:
+            errors.append(f"Legacy user skill entry exists outside .agents: {path}")
+        system = LEGACY / ".system"
+        marker = system / ".codex-system-skills.marker"
+        if system.exists() and not marker.is_file():
+            errors.append(f"Unrecognized .codex skill tree without system marker: {system}")
 
     names: set[str] = set()
     for directory in sorted(path for path in SKILLS.iterdir() if path.is_dir()):
@@ -77,6 +85,27 @@ def doctor() -> list[str]:
             errors.append(f"Duplicate skill name: {name}")
         if name:
             names.add(name)
+
+    if (LEGACY / ".system").is_dir():
+        try:
+            config = tomllib.loads(CODEX_CONFIG.read_text(encoding="utf-8"))
+        except (OSError, tomllib.TOMLDecodeError) as exc:
+            errors.append(f"Could not verify Codex skill overrides: {exc}")
+        else:
+            disabled = {
+                item.get("path")
+                for item in config.get("skills", {}).get("config", [])
+                if item.get("enabled") is False
+            }
+            for directory in sorted((LEGACY / ".system").iterdir()):
+                skill_file = directory / "SKILL.md"
+                if directory.name not in names or not skill_file.is_file():
+                    continue
+                if str(skill_file) not in disabled:
+                    errors.append(
+                        "Duplicate Codex system skill is not disabled in config: "
+                        f"{skill_file}"
+                    )
 
     if LOCK_FILE.is_file():
         lock = json.loads(LOCK_FILE.read_text(encoding="utf-8"))
@@ -253,4 +282,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-
