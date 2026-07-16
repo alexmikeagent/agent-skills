@@ -160,8 +160,27 @@ def scan(vault: Path) -> list[Finding]:
         if not (vault / directory).is_dir():
             findings.append(Finding("error", directory, "Required directory is missing"))
 
-    if Path("/Users/aman-mac-work/.codex/skills").exists():
-        findings.append(Finding("error", "/Users/aman-mac-work/.codex/skills", "Legacy skill tree must not exist"))
+    legacy_skills = Path("/Users/aman-mac-work/.codex/skills")
+    if legacy_skills.exists():
+        for entry in legacy_skills.iterdir():
+            if entry.name != ".system":
+                findings.append(
+                    Finding(
+                        "error",
+                        str(entry),
+                        "User skill entry must live under ~/.agents/skills",
+                    )
+                )
+        system_skills = legacy_skills / ".system"
+        marker = system_skills / ".codex-system-skills.marker"
+        if system_skills.exists() and not marker.is_file():
+            findings.append(
+                Finding(
+                    "error",
+                    str(system_skills),
+                    "Unrecognized .codex skill tree without the Codex system marker",
+                )
+            )
 
     for path in vault.rglob("*"):
         if path.is_dir() or excluded(path, vault):
@@ -234,4 +253,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-
