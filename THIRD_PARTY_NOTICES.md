@@ -17,6 +17,8 @@ The local modifications are documented in Git history.
 
 - Source consulted: [BuilderIO/skills](https://github.com/BuilderIO/skills)
 - Revision: `d1344bc088f850f829d9bcf4170516bb670a438f`
+- Context consulted: [Introducing /visual-plan](https://youtu.be/NE0aBuQF0HA)
+  and [Builder.io's visual planning write-up](https://www.builder.io/blog/claude-code-plan)
 - License: MIT
 - Local changes: replaced hosted services, authentication, connectors, and
   remote preview tooling with canonical Markdown, restricted MDX, and a local
