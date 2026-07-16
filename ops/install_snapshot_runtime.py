@@ -22,6 +22,8 @@ LOGS = HOME / "Library/Logs/Second Brain"
 LABEL = "com.amanuel.second-brain-snapshot"
 DOMAIN = f"gui/{os.getuid()}"
 PLIST_NAME = f"{LABEL}.plist"
+APP_IDENTIFIER = "com.amanuel.second-brain-snapshot-app"
+DESIGNATED_REQUIREMENT = f'=designated => identifier "{APP_IDENTIFIER}";'
 
 
 def run(*command: str, check: bool = True) -> subprocess.CompletedProcess[str]:
@@ -96,7 +98,9 @@ def install() -> None:
         "--sign",
         "-",
         "--identifier",
-        "com.amanuel.second-brain-snapshot-app",
+        APP_IDENTIFIER,
+        "--requirements",
+        DESIGNATED_REQUIREMENT,
         str(APP),
     )
     run(plutil, "-lint", str(CONTENTS / "Info.plist"))
