@@ -161,7 +161,28 @@ def write_text_if_changed(path: Path, content: str) -> None:
     path.write_text(content, encoding="utf-8")
 
 
+def source_tree_state() -> tuple[str, bool]:
+    tree = run(["git", "rev-parse", "HEAD:skills"], cwd=REPO).stdout.strip()
+    dirty = any(
+        run(command, cwd=REPO, check=False).returncode != 0
+        for command in (
+            ["git", "diff", "--quiet", "--", "skills"],
+            ["git", "diff", "--cached", "--quiet", "--", "skills"],
+        )
+    )
+    untracked = run(
+        ["git", "ls-files", "--others", "--exclude-standard", "--", "skills"],
+        cwd=REPO,
+    ).stdout.strip()
+    return tree, dirty or bool(untracked)
+
+
 def build_mirror() -> None:
+    source_tree, source_dirty = source_tree_state()
+    sentinel_content = (
+        "generated; edit only for explicit promotion\n"
+        f"source-tree: {source_tree}\n"
+    )
     MIRROR.mkdir(parents=True, exist_ok=True)
     existing = list(MIRROR.iterdir())
     if existing and not SENTINEL.is_file():
@@ -169,6 +190,15 @@ def build_mirror() -> None:
     for child in existing:
         if child.name not in {SENTINEL.name, "index.md", "skills"}:
             remove_path(child)
+
+    if (
+        not source_dirty
+        and SENTINEL.is_file()
+        and SENTINEL.read_text(encoding="utf-8") == sentinel_content
+        and (MIRROR / "index.md").is_file()
+        and (MIRROR / "skills").is_dir()
+    ):
+        return
 
     if (MIRROR / "skills").exists() and not (MIRROR / "skills").is_dir():
         remove_path(MIRROR / "skills")
@@ -211,7 +241,7 @@ def build_mirror() -> None:
             remove_path(destination)
         shutil.copy2(source, destination)
 
-    write_text_if_changed(SENTINEL, "generated; edit only for explicit promotion\n")
+    write_text_if_changed(SENTINEL, sentinel_content)
     lines = [
         "---",
         "type: skills-catalog",
