@@ -9,6 +9,7 @@ import os
 import shutil
 import subprocess
 import sys
+import time
 from datetime import datetime
 from pathlib import Path
 
@@ -242,17 +243,33 @@ def update_drive_mirror(required: bool = False) -> Path | None:
         )
     stage_drive_mirror()
     destination.mkdir(parents=True, exist_ok=True)
-    run(
-        [
-            RSYNC,
-            "-a",
-            "--whole-file",
-            "--delete",
-            f"{DRIVE_STAGING}/",
-            f"{destination}/",
-        ],
-        capture=True,
-    )
+    command = [
+        RSYNC,
+        "-a",
+        "--whole-file",
+        "--delete",
+        f"{DRIVE_STAGING}/",
+        f"{destination}/",
+    ]
+    last_detail = "unknown error"
+    for attempt in range(1, 4):
+        result = run(command, check=False, capture=True)
+        if result.returncode == 0:
+            break
+        last_detail = (result.stderr or result.stdout or "").strip() or (
+            f"exit code {result.returncode}"
+        )
+        if attempt < 3:
+            message = (
+                f"Drive mirror attempt {attempt} failed ({last_detail}); retrying"
+            )
+            print(f"[WARN] {message}")
+            log(message)
+            time.sleep(attempt * 2)
+    else:
+        raise CommandError(
+            f"{' '.join(command)} failed after 3 attempts: {last_detail}"
+        )
     print(f"[OK] Google Drive mirror updated: {destination}")
     return destination
 
