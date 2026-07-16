@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import difflib
+import filecmp
 import json
 import shutil
 import subprocess
@@ -145,20 +146,36 @@ def mirrorable(path: Path) -> bool:
     return path.name.startswith("LICENSE") or path.name == "SKILL.md" or path.suffix.lower() in MIRRORABLE_SUFFIXES
 
 
+def remove_path(path: Path) -> None:
+    if path.is_dir() and not path.is_symlink():
+        shutil.rmtree(path)
+    else:
+        path.unlink(missing_ok=True)
+
+
+def write_text_if_changed(path: Path, content: str) -> None:
+    if path.is_file() and path.read_text(encoding="utf-8") == content:
+        return
+    if path.exists() and not path.is_file():
+        remove_path(path)
+    path.write_text(content, encoding="utf-8")
+
+
 def build_mirror() -> None:
     MIRROR.mkdir(parents=True, exist_ok=True)
     existing = list(MIRROR.iterdir())
-    if existing and not SENTINEL.exists():
+    if existing and not SENTINEL.is_file():
         raise RuntimeError(f"Refusing to replace non-generated mirror directory: {MIRROR}")
     for child in existing:
-        if child.is_dir() and not child.is_symlink():
-            shutil.rmtree(child)
-        else:
-            child.unlink()
+        if child.name not in {SENTINEL.name, "index.md", "skills"}:
+            remove_path(child)
 
+    if (MIRROR / "skills").exists() and not (MIRROR / "skills").is_dir():
+        remove_path(MIRROR / "skills")
     target_skills = MIRROR / "skills"
-    target_skills.mkdir(parents=True)
+    target_skills.mkdir(parents=True, exist_ok=True)
     rows: list[tuple[str, str]] = []
+    mirrored_files: list[tuple[Path, Path]] = []
     for directory in sorted(path for path in SKILLS.iterdir() if path.is_dir()):
         name, description = parse_skill(directory / "SKILL.md")
         if not name:
@@ -168,11 +185,33 @@ def build_mirror() -> None:
             if not source.is_file() or not mirrorable(source):
                 continue
             rel = source.relative_to(SKILLS)
-            destination = target_skills / rel
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(source, destination)
+            mirrored_files.append((source, rel))
 
-    SENTINEL.write_text("generated; edit only for explicit promotion\n", encoding="utf-8")
+    desired = {rel for _, rel in mirrored_files}
+    for path in sorted(target_skills.rglob("*"), key=lambda item: len(item.parts), reverse=True):
+        rel = path.relative_to(target_skills)
+        if path.is_file() or path.is_symlink():
+            if rel not in desired:
+                path.unlink()
+        elif path.is_dir():
+            if rel in desired:
+                shutil.rmtree(path)
+            else:
+                try:
+                    path.rmdir()
+                except OSError:
+                    pass
+
+    for source, rel in mirrored_files:
+        destination = target_skills / rel
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        if destination.is_file() and filecmp.cmp(source, destination, shallow=False):
+            continue
+        if destination.exists():
+            remove_path(destination)
+        shutil.copy2(source, destination)
+
+    write_text_if_changed(SENTINEL, "generated; edit only for explicit promotion\n")
     lines = [
         "---",
         "type: skills-catalog",
@@ -196,7 +235,7 @@ def build_mirror() -> None:
         safe_description = description.replace("|", "\\|")
         lines.append(f"| [[skills/{name}/SKILL|{name}]] | {safe_description} |")
     lines.append("")
-    (MIRROR / "index.md").write_text("\n".join(lines), encoding="utf-8")
+    write_text_if_changed(MIRROR / "index.md", "\n".join(lines))
 
 
 def promote(relative_path: str, apply: bool) -> int:
