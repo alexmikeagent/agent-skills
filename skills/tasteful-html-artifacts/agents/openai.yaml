@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tasteful HTML Artifacts"
+  short_description: "Create a polished standalone HTML document"
+  default_prompt: "Use $tasteful-html-artifacts to turn this material into a distinctive self-contained HTML reading experience."

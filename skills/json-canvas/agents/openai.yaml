@@ -1,0 +1,4 @@
+interface:
+  display_name: "JSON Canvas"
+  short_description: "Create native Obsidian Canvas files"
+  default_prompt: "Use $json-canvas to create or update this standards-compliant Canvas."

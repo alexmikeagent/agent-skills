@@ -1,0 +1,4 @@
+interface:
+  display_name: "Visual Plan"
+  short_description: "Build a local visual implementation plan"
+  default_prompt: "Use $visual-plan to produce a source-grounded local plan bundle for this work."

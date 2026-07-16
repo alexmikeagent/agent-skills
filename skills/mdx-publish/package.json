@@ -1,0 +1,19 @@
+{
+  "name": "personal-mdx-publisher",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Restricted MDX-to-static-HTML renderer for the personal Obsidian vault.",
+  "scripts": {
+    "check": "node scripts/publish.mjs check",
+    "build": "node scripts/publish.mjs build"
+  },
+  "dependencies": {
+    "@mdx-js/mdx": "3.1.1",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
+    "remark-frontmatter": "5.0.0",
+    "remark-gfm": "4.0.1",
+    "unist-util-visit": "5.1.0"
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Vault Capture"
+  short_description: "Capture durable notes into the Second Brain"
+  default_prompt: "Use $vault-capture to save this information as a durable Obsidian note."

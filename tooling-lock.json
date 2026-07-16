@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "verified_on": "2026-07-15",
+  "executables": {
+    "node": "26.4.0",
+    "npm": "11.17.0",
+    "python3": "3.14.6",
+    "git": "2.50.1 (Apple Git-155)",
+    "gh": "2.94.0",
+    "jq": "1.8.1",
+    "rsync": "openrsync protocol 29"
+  },
+  "npm_packages": {
+    "@mdx-js/mdx": "3.1.1",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
+    "remark-frontmatter": "5.0.0",
+    "remark-gfm": "4.0.1",
+    "unist-util-visit": "5.1.0"
+  },
+  "audited_skills": [
+    "obsidian-markdown",
+    "obsidian-bases",
+    "json-canvas",
+    "vault-capture",
+    "research-ingest",
+    "investigation-case",
+    "context-handoff",
+    "vault-health",
+    "skills-repo-maintenance",
+    "mdx-publish",
+    "visual-plan",
+    "visual-recap",
+    "tasteful-html-artifacts"
+  ],
+  "forbidden_terms": [
+    "@agent-native/core",
+    "plan.agent-native.com",
+    "web-artifacts-builder",
+    "rclone",
+    "gitleaks",
+    "plantuml",
+    "graphviz",
+    "codehike",
+    "npx @latest"
+  ]
+}

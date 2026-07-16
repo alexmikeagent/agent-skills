@@ -1,0 +1,4 @@
+interface:
+  display_name: "MDX Publish"
+  short_description: "Build safe static MDX and HTML document bundles"
+  default_prompt: "Use $mdx-publish to turn this canonical Markdown document into restricted MDX and standalone HTML."

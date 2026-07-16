@@ -1,0 +1,4 @@
+interface:
+  display_name: "UiPath PDD DOCX"
+  short_description: "Analyze UiPath projects and build formatted PDD content."
+  default_prompt: "Analyze a UiPath project, draft evidence-based PDD content, and insert the requested section into a DOCX template with clean Word formatting."

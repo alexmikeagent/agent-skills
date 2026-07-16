@@ -1,0 +1,4 @@
+interface:
+  display_name: "UiPath GenAI & Integration Service"
+  short_description: "Build governed, pricing-aware UiPath AI automations"
+  default_prompt: "Use $uipath-genai-integration-service to design and build a cost-aware UiPath automation with GenAI and Integration Service activities."

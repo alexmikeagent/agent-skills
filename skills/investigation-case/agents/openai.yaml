@@ -1,0 +1,4 @@
+interface:
+  display_name: "Investigation Case"
+  short_description: "Build evidence-led investigation case files"
+  default_prompt: "Use $investigation-case to organize this inquiry into claims, evidence, hypotheses, and a timeline."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Visual Recap"
+  short_description: "Build a local visual change recap"
+  default_prompt: "Use $visual-recap to produce a source-grounded local recap bundle for this change."

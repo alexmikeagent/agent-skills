@@ -1,0 +1,4 @@
+interface:
+  display_name: "Context Handoff"
+  short_description: "Preserve exact context for the next agent session"
+  default_prompt: "Use $context-handoff to save the current state, decisions, evidence, and exact next action."

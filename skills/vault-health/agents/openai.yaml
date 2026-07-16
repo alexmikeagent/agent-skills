@@ -1,0 +1,4 @@
+interface:
+  display_name: "Vault Health"
+  short_description: "Audit vault structure, safety, and portability"
+  default_prompt: "Use $vault-health to validate the Second Brain before syncing or publishing it."

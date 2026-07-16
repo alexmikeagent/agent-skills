@@ -1,0 +1,4 @@
+interface:
+  display_name: "Skills Repository Maintenance"
+  short_description: "Maintain canonical global skills and vault mirror"
+  default_prompt: "Use $skills-repo-maintenance to audit, mirror, or explicitly promote a global skill change."

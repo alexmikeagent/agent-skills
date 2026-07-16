@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Ingest"
+  short_description: "Store sourced research without losing context"
+  default_prompt: "Use $research-ingest to preserve this research, evidence, and source context in the vault."

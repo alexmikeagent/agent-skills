@@ -1,0 +1,4 @@
+interface:
+  display_name: "Obsidian Bases"
+  short_description: "Build native Obsidian Base views"
+  default_prompt: "Use $obsidian-bases to create or update this native Obsidian Base."
