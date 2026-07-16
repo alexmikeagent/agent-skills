@@ -65,6 +65,11 @@ def excluded(path: Path, vault: Path) -> bool:
     return (
         rel.startswith("90 Meta/Skills Mirror/")
         or rel == "90 Meta/Skills Mirror"
+        or (
+            rel.startswith(".obsidian/")
+            and path.name.startswith("workspace")
+            and path.suffix == ".json"
+        )
         or "/node_modules/" in f"/{rel}/"
         or rel.startswith(".git/")
     )
