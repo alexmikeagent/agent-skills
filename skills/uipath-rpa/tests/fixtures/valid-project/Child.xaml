@@ -1,0 +1,10 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Child" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_amount" Type="InArgument(s:Decimal)" />
+  </x:Members>
+  <sap2010:WorkflowViewState.IdRef>Child_1</sap2010:WorkflowViewState.IdRef>
+  <Sequence DisplayName="Child" sap2010:WorkflowViewState.IdRef="Child_Sequence_1">
+    <ui:LogMessage DisplayName="Log Message - Start Child" sap2010:WorkflowViewState.IdRef="Child_Log_Start_1" Level="Info" Message="[&quot;Start: Child&quot;]" />
+    <ui:LogMessage DisplayName="Log Message - End Child" sap2010:WorkflowViewState.IdRef="Child_Log_End_1" Level="Info" Message="[&quot;End: Child&quot;]" />
+  </Sequence>
+</Activity>

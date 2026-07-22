@@ -1,0 +1,10 @@
+{
+  "schema": "uipath-runner-profile/v1",
+  "runner": "parallels",
+  "vm_name": "Windows 11",
+  "host_jobs_root": "~/.codex/uipath-rpa/jobs",
+  "guest_jobs_root": "%LOCALAPPDATA%\\CodexUiPathBridge\\jobs",
+  "required_guest_architecture": "x64",
+  "require_current_user": true,
+  "retain_successful_jobs": false
+}

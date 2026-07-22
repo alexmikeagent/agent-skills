@@ -1,0 +1,8 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Main" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members />
+  <sap2010:WorkflowViewState.IdRef>Main_1</sap2010:WorkflowViewState.IdRef>
+  <Sequence DisplayName="Main" sap2010:WorkflowViewState.IdRef="Main_Sequence_1">
+    <ui:LogMessage DisplayName="Log Message - Start Main" sap2010:WorkflowViewState.IdRef="Main_Log_Start_1" Level="Info" Message="[&quot;Start: Main | SyntheticData=True&quot;]" />
+    <ui:LogMessage DisplayName="Log Message - End Main" sap2010:WorkflowViewState.IdRef="Main_Log_End_1" Level="Info" Message="[&quot;End: Main&quot;]" />
+  </Sequence>
+</Activity>

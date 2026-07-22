@@ -1,80 +1,94 @@
 ---
 name: uipath-rpa
-description: "Create, edit, debug, and validate UiPath RPA projects and workflows, including .xaml and .cs coded workflows, REFramework performers, UI automation, Object Repository selectors, test cases, integration-service connectors, and deployment. Use whenever a request concerns UiPath project.json, XAML, coded workflows, Studio validation/build errors, UI scraping/automation, Orchestrator packages, or UiPath tests."
+description: "Create, edit, debug, and validate UiPath RPA projects and workflows. Use for XAML or coded workflows, REFramework performers, behavior-preserving workflow refactors, UiPath tests, project.json and sidecars, Studio build errors, UI automation, Integration Service, and deployment."
 ---
 
 # UiPath RPA
 
-Use the project’s installed packages, Studio-generated XAML, and a working sibling workflow as the source of truth. Prefer the smallest Studio-readable change that meets the requested business behavior.
+Use the installed packages, Studio-generated XAML, and a working sibling workflow as the serialization truth. Make the smallest coherent change that preserves the requested business behavior.
 
-## 1. Establish the execution context
+## 1. Establish the project contract
 
-1. Resolve `PROJECT_DIR` from the named project or nearest `project.json`.
-2. Read `project.json`: `targetFramework`, `expressionLanguage`, dependencies, entry points, and project type.
-3. Inspect a nearby working workflow before serializing a new or edited XAML file. It is the style and serialization anchor.
-4. Check whether `.claude/rules/project-context.md` exists. If its recorded file/dependency counts are materially stale, refresh project context before a broad change; do not create or overwrite user-owned context files for a narrow repair.
+1. Resolve the project from the nearest `project.json`; read its framework, expression language, dependencies, entry points, and test registrations.
+2. Run `python3 <skill-dir>/scripts/uipath_tool.py inspect --project <project> --format text`.
+3. Open a nearby working workflow as the style anchor for namespaces, Assign shape, arguments, ViewState, logs, and line endings.
+4. For a behavior-sensitive refactor, read [behavior-preserving-refactors.md](references/xaml/behavior-preserving-refactors.md) and record the boundary before editing.
 
-Never change `targetFramework` or `expressionLanguage` in an existing project. Do not add or remove a package before checking `project.json` and usages across the project.
+Completion criterion: the affected call graph, public arguments, expected outcomes, style anchor, and required validation gates are known.
 
-## 2. Choose the correct path
+Never change `targetFramework` or `expressionLanguage` in an existing project. Check package usages before changing dependencies.
 
-| Work | Read before acting |
+## 2. Read only the active branch
+
+| Work | Required reference |
 |---|---|
-| Routine edit of a mature XAML workflow | [xaml/xaml-edit-fast-path.md](references/xaml/xaml-edit-fast-path.md) |
-| New XAML, unknown activity, Flowchart, or StateMachine | [xaml/workflow-guide.md](references/xaml/workflow-guide.md) and [xaml/xaml-basics-and-rules.md](references/xaml/xaml-basics-and-rules.md) |
-| XAML type, namespace, reference, or Designer error | [xaml/common-pitfalls.md](references/xaml/common-pitfalls.md) and the matching sibling workflow |
-| Coded workflow or C# source | [coded/operations-guide.md](references/coded/operations-guide.md) and [coded/coding-guidelines.md](references/coded/coding-guidelines.md) |
-| UI automation / scraping | [ui-automation-guide.md](references/ui-automation-guide.md) |
+| Routine mature-XAML edit | [xaml-edit-fast-path.md](references/xaml/xaml-edit-fast-path.md) |
+| Behavior-preserving split or test replacement | [behavior-preserving-refactors.md](references/xaml/behavior-preserving-refactors.md) |
+| Build, run, or gate interpretation | [validation-guide.md](references/validation-guide.md) |
+| Local Parallels Windows validation | [parallels-windows-bridge.md](references/parallels-windows-bridge.md) |
 | XAML test case | [testing-guide.md](references/testing-guide.md) |
-| DataTable, LINQ, Regex, collections, JSON, or conversion | [data-manipulation-guide.md](references/data-manipulation-guide.md) |
-| Integration Service connector | [is-connector-xaml-guide.md](references/is-connector-xaml-guide.md) or [coded/integration-service-guide.md](references/coded/integration-service-guide.md) |
-| Build, validation, run, or debugging | [validation-guide.md](references/validation-guide.md) and [debugging.md](references/debugging.md) |
-| Package, project initialization, or Studio environment | [environment-setup.md](references/environment-setup.md) |
-| Publish a process or library | [publishing-guide.md](references/publishing-guide.md) or [library-authoring-guide.md](references/library-authoring-guide.md) |
+| New XAML, Flowchart, or StateMachine | [workflow-guide.md](references/xaml/workflow-guide.md) |
+| Coded workflow | [operations-guide.md](references/coded/operations-guide.md) and [coding-guidelines.md](references/coded/coding-guidelines.md) |
+| UI automation | [ui-automation-guide.md](references/ui-automation-guide.md) and installed package docs |
+| DataTable, LINQ, Regex, collections, or JSON | [data-manipulation-guide.md](references/data-manipulation-guide.md) |
+| Integration Service | [is-connector-xaml-guide.md](references/is-connector-xaml-guide.md) |
 
-Read each selected reference in full. Do not apply the full greenfield activity-discovery flow to routine Sequence/Assign/If/LogMessage work; use the XAML fast path instead.
+Read the selected reference in full. Use [reference-map.md](references/reference-map.md) only when the correct branch is unclear.
 
-## 3. Host-aware validation
+## 3. Implement a coherent slice
 
-### Mac-hosted editing
+- Preserve the sibling anchor's XAML form; do not regenerate an unaffected workflow.
+- Prefer native UiPath activities and explicit typed Assigns for business logic.
+- Give containers and actions business-readable `DisplayName` values.
+- Add PHI-safe start/end and narrative decision logs; use counts, flags, and reason codes rather than raw transaction data.
+- Keep every `WorkflowViewState.IdRef` unique.
+- Keep entry-point XAML, sidecars, and `entry-points.json` synchronized.
+- Verify every invoke target and direct argument binding.
+- Confirm unfamiliar activity tags against installed package documentation or a sibling usage.
 
-Do not run `uip rpa analyzer-rules list`, `validate`, `build`, `run`, `debug start`, `studio start`, `activities get-default-xaml`, or UIA capture commands unless a signed-in Windows UiPath environment is explicitly available to this task. On this Mac they are commonly non-actionable (`Helm requires a signed-in user` or Windows-project-on-Linux failures).
+For test replacement, add and register the replacement before deleting the superseded test. Preserve old tests until the replacement passes the gates required by the change.
 
-Use the static gate from [xaml/xaml-edit-fast-path.md](references/xaml/xaml-edit-fast-path.md): XML parse, duplicate IdRef scan, sidecar and invoke-contract checks, reference/import checks, local-style checks, and CRLF-aware `git diff --check`. State that Windows Studio/Robot compile and run validation remains required before deployment.
+Before any test deletion, run the affected L1 scope with `--require-registered-tests`. `META003` is otherwise a warning for legacy compatibility; this flag makes an unregistered `TC_*.xaml` an error.
 
-### Signed-in Windows UiPath environment
+Completion criterion: one reviewable slice is implemented, all affected contracts remain intentional, and replacement coverage exists before removals.
 
-For an authoring session, run enabled analyzer rules once before editing. After each touched workflow, run per-file validation. Before declaring compile verification, run a project build after all files validate. `validate` alone does not catch every member/property or JIT expression error. Treat the outer command result (or `HasErrors`), not a workflow-emitted log level, as the command success verdict.
+## 4. Run explicit validation gates
 
-## 4. XAML rules that prevent Studio repairs and compile errors
+Run the static gate on the touched scope:
 
-- Match the sibling anchor’s namespaces, assembly references, root `x:Class`, argument/variable syntax, Activity serialization, line endings, ViewState, and naming style.
-- Keep mature workflows Assign-heavy: one expanded Assign per target, explicit typed `InArgument` / `OutArgument`, unique `WorkflowViewState.IdRef`, and `Sequence` wrappers for every container branch/body.
-- Write PHI-minimized logs: workflow start and end, key counts/flags/reason codes, branch outcome, fallback, and mapped result. Never log patient identifiers, raw comments, credentials, tokens, prompts, or full model responses.
-- For `scg:List(...)`, `List(Of T)`, or LINQ `.ToList()` in a Visual Basic expression, add `System.Collections.Generic` to `TextExpression.NamespacesForImplementation` and copy compatible `System.Collections`, `System.Core`, and `System.ObjectModel` assembly references from the anchor. `xmlns:scg` only supports the XAML type declaration; it does not make `List` visible to the VB compiler.
-- Treat VB expression compilation as a separate gate from XML parsing. Run `scripts/check_vb_xaml_expressions.py` on touched VB XAML files. It catches unbalanced parentheses, Studio-unsafe fluent chains split after `.`, and `Regex` calls that lack a VB namespace import.
-- Prefer `System.Text.RegularExpressions.Regex` in small or legacy expressions. An assembly reference alone does not declare the short `Regex` name; without the corresponding `TextExpression.NamespacesForImplementation` import, Studio reports `BC30451` and may misleadingly suggest creating a variable in Data Manager.
-- Do not split a fluent VB chain at a trailing period. Studio can report `BC30198: ')' expected` even when the XML and a superficial parenthesis count are clean. Keep the chain on one physical line or split intermediate results into typed Assign activities.
-- For a new activity outside the common built-ins, read the installed package docs under `.local/docs/packages/<PackageId>/` before generating its tag or properties. Do not infer an activity class name from its Studio display label.
-- When editing `Main.xaml` or another active entry point’s arguments, update the XAML, matching `.xaml.json`, and `entry-points.json` together. Components normally need no sidecar unless published as entry points.
-- Before changing an `InvokeWorkflowFile`, confirm target existence, argument direction/type compatibility, and intentional defaults.
+```bash
+python3 <skill-dir>/scripts/uipath_tool.py audit \
+  --project <project> --scope changed --policy baseline
+```
 
-## 5. Coded workflow rules
+Choose the policy deliberately:
 
-- Use `CodedWorkflow` plus `[Workflow]` or `[TestCase]` only for executable coded workflows and tests; keep reusable source files plain C#.
-- Use one workflow/test class per file, an `Execute` entry method, and the sanitized project-name namespace.
-- Add required packages to `project.json` before using their services. Register test cases in `designOptions.fileInfoCollection`; update process entry points only when the project type requires them.
+- Use `baseline` for diagnosis, contract repair, routine orchestration changes, and mixed workflow scopes.
+- Use `native-business-rules` for production rule workflows that must prohibit Invoke Code and Invoke Method, require boundary/storytelling logs, and use Studio-readable Assign serialization. Scope it to rule workflows; its leaf rule intentionally rejects Invoke Workflow File.
 
-## 6. UI automation boundary
+Use `normalize-eol --check` before any explicit `--write` repair. If `inspect` reports a parse finding, stop at L1 diagnosis; do not proceed to Windows validation until the XAML parses.
 
-Use UiPath UI Automation and Object Repository targets for visible desktop/browser interaction. Read [ui-automation-guide.md](references/ui-automation-guide.md) before any UIA work and capture selectors through the documented UiPath indication/configuration flow; never hand-write selectors or substitute Playwright, Selenium, raw DOM scripting, PowerShell, or HTTP form posts.
+On this Mac, L1 proves structure and contracts only. When Windows proof is required, run:
 
-If live target capture is unavailable, use real UIA activities with explicit `TODO Indicate` markers—never log-only interaction stubs.
+```bash
+python3 <skill-dir>/scripts/uipath_tool.py windows preflight --vm "Windows 11"
+python3 <skill-dir>/scripts/uipath_tool.py windows validate \
+  --project <project> --vm "Windows 11" --mode build-and-test --tests changed
+```
 
-## 7. Delivery checklist
+Treat the gates separately:
 
-- Verify the requested business behavior and affected workflow contracts.
-- Run the validation appropriate to the active host and report its actual scope.
-- List touched workflow/project files and note any sidecar, dependency, or entry-point update.
-- Do not call the automation verified or deployment-ready until Windows Studio/Robot compilation and the appropriate run/test have passed.
-- When a plan governs the work, re-read it before reporting and identify any unchecked item and its concrete blocker.
+- **L1 static:** XML, expressions, metadata, invoke contracts, style policy, and line endings.
+- **L2 compile:** Windows dependency restore and UiPath build.
+- **L3 execution:** selected Windows test or workflow execution.
+- **UAT:** representative business validation outside the technical gates.
+
+Completion criterion: every required gate passed, or its exact blocked state and evidence are recorded. Never promote L1 into a compile or runtime claim.
+
+## 5. Deliver evidence
+
+- State the L1, L2, L3, and UAT status independently.
+- List changed workflows, project metadata, tests, and sidecars.
+- Report remaining warnings and concrete blockers.
+- For behavior-sensitive work, name the parity cases and unchanged output/status/exception boundaries.
+- Do not call the automation deployment-ready until Windows compilation, appropriate execution, and required UAT pass.

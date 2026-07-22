@@ -198,40 +198,18 @@ Copy structure from a sibling usage in the same project when possible. Known rep
 
 ## 7. Static verification gate (Mac default)
 
-Run on **touched files** after the edit pass. Do not rediscover blocked `uip rpa validate`/`build` on Mac.
+Run the collocated validator on touched files after the edit pass. Do not recreate this gate as ad hoc shell snippets.
 
 ```bash
-# 1) Well-formed XML
-xmllint --noout <touched.xaml> ...
-
-# 2) Sidecar JSON (when Main/entry args changed)
-jq empty project.json entry-points.json Main.xaml.json
-
-# 3) Collapsed / mixed Assign style (janky in Studio — see assign-studio-style.md)
-rg -n '<Assign\.To><|<Assign\.Value><|</Assign\.To><Assign\.Value>|</Assign\.Value></Assign>|<Assign[^>]*x:TypeArguments|DisplayName="Assign"|CORRECT Assign' <touched.xaml>
-
-# 4) Collection-expression contract (when List/LINQ is used)
-# Confirm the import and references are present in both TextExpression sections.
-rg -n 'System\.Collections\.Generic|<AssemblyReference>System\.Collections</AssemblyReference>|<AssemblyReference>System\.Core</AssemblyReference>|<AssemblyReference>System\.ObjectModel</AssemblyReference>' <touched.xaml>
-
-# 5) One-line If.Else (style drift)
-rg -n '<If\.Else><[^S]' <touched.xaml>
-
-# 6) Duplicate WorkflowViewState.IdRef inside each file
-#    (count IdRef values; any count > 1 is a fail)
-
-# 7) Invoke targets resolve (normalize / and \\)
-
-# 8) Whitespace check without CRLF false positives
-git -c core.whitespace=cr-at-eol diff --check -- <touched files>
-
-# 9) VB expression compilation hazards that XML parsing cannot see
-python3 /absolute/path/to/uipath-rpa/scripts/check_vb_xaml_expressions.py <touched.xaml>
+python3 <skill-dir>/scripts/uipath_tool.py audit \
+  --project <project> --scope changed --policy baseline
 ```
 
-**Pass criteria:** XML clean, VB expression hazard scan clean, no duplicate IdRefs, no collapsed Assigns (unless anchor is truly compact — rare), invoke contracts OK, sidecars updated if entry args changed.
+For native business-rule cleanup, replace `baseline` with `native-business-rules` and limit the scope to the intended leaf workflows. Run `normalize-eol --check` before any explicit EOL repair.
 
-**Always state:** Windows UiPath Studio/Robot compile + run validation remains outstanding on Mac-hosted work.
+**Pass criteria:** L1 is `passed`; every warning has been reviewed; invoke contracts, metadata, expression hazards, line endings, and the selected policy are clean for the intended scope.
+
+**Always state:** L1 is static evidence. Use the Parallels Windows bridge from [validation-guide.md](../validation-guide.md) for L2 compile and L3 execution evidence.
 
 ---
 

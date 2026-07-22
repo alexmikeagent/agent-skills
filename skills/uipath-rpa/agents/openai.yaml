@@ -1,0 +1,4 @@
+interface:
+  display_name: "UiPath RPA"
+  short_description: "Edit and validate UiPath projects safely"
+  default_prompt: "Use $uipath-rpa to make a contract-preserving UiPath workflow change and run the appropriate validation gates."

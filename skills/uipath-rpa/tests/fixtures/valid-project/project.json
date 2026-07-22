@@ -1,0 +1,30 @@
+{
+  "name": "ValidFixture",
+  "projectId": "00000000-0000-0000-0000-000000000001",
+  "main": "Main.xaml",
+  "dependencies": {
+    "UiPath.System.Activities": "[26.6.0]",
+    "UiPath.Testing.Activities": "[25.10.2]"
+  },
+  "schemaVersion": "4.0",
+  "designOptions": {
+    "fileInfoCollection": [
+      {
+        "editingStatus": "InProgress",
+        "testCaseId": "00000000-0000-0000-0000-000000000002",
+        "testCaseType": "TestCase",
+        "fileName": "Tests\\TC_Child.xaml"
+      }
+    ]
+  },
+  "expressionLanguage": "VisualBasic",
+  "entryPoints": [
+    {
+      "filePath": "Main.xaml",
+      "uniqueId": "00000000-0000-0000-0000-000000000003",
+      "input": [],
+      "output": []
+    }
+  ],
+  "targetFramework": "Windows"
+}

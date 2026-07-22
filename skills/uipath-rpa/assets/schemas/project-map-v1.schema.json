@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "uipath-project-map-v1.schema.json",
+  "title": "UiPath project map v1",
+  "type": "object",
+  "required": ["schema", "project", "nodes", "edges"],
+  "properties": {
+    "schema": {"const": "uipath-project-map/v1"},
+    "project": {"type": "object"},
+    "nodes": {"type": "array", "items": {"type": "object"}},
+    "edges": {"type": "array", "items": {"type": "object"}},
+    "findings": {"type": "array", "items": {"type": "object"}}
+  }
+}

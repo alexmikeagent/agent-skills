@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "uipath-validation-result-v1.schema.json",
+  "title": "UiPath validation result v1",
+  "type": "object",
+  "required": ["schema", "project", "environment", "gates", "findings", "tests", "artifacts", "started_at", "finished_at"],
+  "properties": {
+    "schema": {"const": "uipath-validation-result/v1"},
+    "job_id": {"type": ["string", "null"]},
+    "project": {"type": "object"},
+    "environment": {"type": "object"},
+    "scope": {"type": "object"},
+    "gates": {
+      "type": "object",
+      "required": ["static", "compile", "execution", "uat"],
+      "properties": {
+        "static": {"$ref": "#/$defs/gate"},
+        "compile": {"$ref": "#/$defs/gate"},
+        "execution": {"$ref": "#/$defs/gate"},
+        "uat": {"$ref": "#/$defs/gate"}
+      }
+    },
+    "findings": {"type": "array", "items": {"type": "object"}},
+    "tests": {"type": "array", "items": {"type": "object"}},
+    "artifacts": {"type": "array", "items": {"type": "object"}},
+    "started_at": {"type": "string"},
+    "finished_at": {"type": "string"}
+  },
+  "$defs": {
+    "gate": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": {"enum": ["passed", "failed", "blocked", "not_run"]},
+        "summary": {"type": "string"}
+      }
+    }
+  }
+}

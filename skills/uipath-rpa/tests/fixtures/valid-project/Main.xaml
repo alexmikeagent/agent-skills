@@ -1,0 +1,21 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Main" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members />
+  <sap2010:WorkflowViewState.IdRef>Main_1</sap2010:WorkflowViewState.IdRef>
+  <Sequence DisplayName="Main" sap2010:WorkflowViewState.IdRef="Main_Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:Decimal" Name="amount" />
+    </Sequence.Variables>
+    <ui:LogMessage DisplayName="Log Message - Start Main" sap2010:WorkflowViewState.IdRef="Main_Log_Start_1" Level="Info" Message="[&quot;Start: Main&quot;]" />
+    <Assign DisplayName="Assign - Amount" sap2010:WorkflowViewState.IdRef="Main_Assign_1">
+      <Assign.To><OutArgument x:TypeArguments="x:Decimal">[amount]</OutArgument></Assign.To>
+      <Assign.Value><InArgument x:TypeArguments="x:Decimal">[1D]</InArgument></Assign.Value>
+    </Assign>
+    <ui:LogMessage DisplayName="Log Message - Amount assigned" sap2010:WorkflowViewState.IdRef="Main_Log_Assign_1" Level="Trace" Message="[&quot;Main | Amount assigned&quot;]" />
+    <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" DisplayName="Child - Invoke Workflow File" sap2010:WorkflowViewState.IdRef="Main_Invoke_1" UnSafe="False" WorkflowFileName="Child.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:Decimal" x:Key="in_amount">[amount]</InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <ui:LogMessage DisplayName="Log Message - End Main" sap2010:WorkflowViewState.IdRef="Main_Log_End_1" Level="Info" Message="[&quot;End: Main&quot;]" />
+  </Sequence>
+</Activity>

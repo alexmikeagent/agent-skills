@@ -1,0 +1,11 @@
+{
+  "name": "WindowsBuildFixture",
+  "projectId": "00000000-0000-0000-0000-000000000010",
+  "main": "Main.xaml",
+  "dependencies": {"UiPath.System.Activities": "[26.6.0]"},
+  "schemaVersion": "4.0",
+  "designOptions": {"fileInfoCollection": []},
+  "expressionLanguage": "VisualBasic",
+  "entryPoints": [{"filePath": "Main.xaml", "uniqueId": "00000000-0000-0000-0000-000000000011", "input": [], "output": []}],
+  "targetFramework": "Windows"
+}

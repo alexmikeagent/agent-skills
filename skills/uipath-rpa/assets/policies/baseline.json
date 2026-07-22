@@ -1,0 +1,10 @@
+{
+  "schema": "uipath-policy/v1",
+  "name": "baseline",
+  "forbid_activities": [],
+  "leaf_forbid_invoke_workflow": false,
+  "require_boundary_logs": false,
+  "log_after_activities": [],
+  "require_expanded_assign": false,
+  "exclude_path_patterns": []
+}

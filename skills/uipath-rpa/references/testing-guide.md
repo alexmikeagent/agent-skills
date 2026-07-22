@@ -1,5 +1,17 @@
 # Testing Guide
 
+## Behavior-preserving replacement gate
+
+When replacing tests during a workflow refactor:
+
+1. Characterize the current externally visible behavior before editing.
+2. Add and register the replacement test in `project.json.designOptions.fileInfoCollection`.
+3. Keep the superseded test until the replacement passes L1 and the required Windows gates.
+4. Assert exact statuses, reason codes, report boundaries, and exception behavior—not only that execution completes.
+5. Delete the superseded test only after replacement evidence is green.
+
+Run registration and contract checks with `scripts/uipath_tool.py audit`. Run selected local Windows tests with `scripts/uipath_tool.py windows validate --mode build-and-test`. Read [xaml/behavior-preserving-refactors.md](xaml/behavior-preserving-refactors.md) before replacing a behavior-sensitive suite.
+
 Reference for XAML test automation features in UiPath RPA projects — XAML test case structure, data-driven testing, XAML test activities, execution templates, and mock testing.
 
 > For coded test case creation (Given-When-Then, assertions, Before/After hooks), see [coded/operations-guide.md § Add a Test Case File](coded/operations-guide.md).

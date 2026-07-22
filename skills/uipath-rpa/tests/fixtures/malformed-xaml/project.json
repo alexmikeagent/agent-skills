@@ -1,0 +1,9 @@
+{
+  "name": "MalformedFixture",
+  "main": "Main.xaml",
+  "dependencies": {},
+  "designOptions": {"fileInfoCollection": []},
+  "expressionLanguage": "VisualBasic",
+  "entryPoints": [{"filePath": "Main.xaml"}],
+  "targetFramework": "Windows"
+}
