@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tasteful Code"
+  short_description: "Build clear, maintainable code with judgment."
+  default_prompt: "Use $tasteful-code to implement this change with the smallest clear design."
