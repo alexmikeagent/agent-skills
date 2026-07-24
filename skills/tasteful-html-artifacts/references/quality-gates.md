@@ -10,6 +10,7 @@ Run every gate before delivery.
 
 ## 2. Information architecture
 - The first viewport explains purpose and current conclusion.
+- The first viewport does not waste a large upper band on empty hero space. Check viewport-height minimums and bottom alignment at both short and tall desktop sizes.
 - The hierarchy reflects meaning rather than the source file's formatting accidents.
 - Important material is easy to find.
 - Secondary detail does not overwhelm the main path.
@@ -40,6 +41,8 @@ Run every gate before delivery.
 - SVGs have accessible names or nearby textual descriptions.
 - Color is not the only carrier of meaning.
 - Touch targets are usable.
+- Long filenames, code identifiers, URLs, and machine labels wrap without escaping cards, columns, or callouts.
+- SVG text remains legible over every fill color after the full CSS cascade is applied; explicitly test inverse labels on dark shapes.
 
 ## 6. Responsiveness
 Check approximately:
@@ -49,6 +52,10 @@ Check approximately:
 - wide desktop
 
 No horizontal scrolling except intentionally scrollable data tables or code.
+
+- Grid and flex children use `min-width: 0` where long content could force overflow.
+- Responsive SVGs fit their content column through `viewBox`; do not impose a forced `min-width` unless the diagram is intentionally scrollable and labeled as such.
+- At 1024–1280px, a persistent sidebar must not starve the primary content or diagram. Make it collapsible when it materially reduces usable canvas, and verify both expanded and collapsed states.
 
 ## 7. Portability and security
 - The HTML opens locally.

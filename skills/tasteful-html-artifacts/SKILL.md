@@ -87,6 +87,8 @@ Do not expose this planning unless useful to the user.
 - Derive colors and motifs from the subject, organization, or content semantics.
 - Structural devices must encode meaning.
 - Whitespace should clarify grouping, not merely make the page look expensive.
+- Do not create a large empty first-screen band with viewport-height heroes or bottom-aligned content; the thesis and primary decision should begin promptly.
+- Long filenames, workflow identifiers, URLs, and inline code must wrap inside their container. Give grid and flex children `min-width: 0` where needed.
 - Use borders, shadows, radii, and gradients sparingly and consistently.
 - Choose a small token system and use it throughout.
 - Make one area memorable; keep the rest disciplined.
@@ -105,6 +107,8 @@ Add interaction only when it reduces cognitive work:
 - annotating or editing a small purpose-built subset
 
 Avoid interaction that merely animates or hides content.
+
+For long desktop documents, make a persistent sidebar collapsible when it materially compresses the reading or diagram area. The control must be a labeled button, expose expanded state with ARIA, remain keyboard-operable, and leave a visible way to reopen the navigation.
 
 ## Common artifact modes
 
