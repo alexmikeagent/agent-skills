@@ -1,4 +1,4 @@
 interface:
   display_name: "Tasteful HTML Artifacts"
-  short_description: "Create a polished standalone HTML document"
-  default_prompt: "Use $tasteful-html-artifacts to turn this material into a distinctive self-contained HTML reading experience."
+  short_description: "Create contextual, source-faithful HTML artifacts"
+  default_prompt: "Use $tasteful-html-artifacts to transform this material into a context-specific, source-faithful HTML reading interface."

@@ -1,6 +1,17 @@
 # Artifact Patterns
 
-Choose the pattern that best matches the document's job. Combine at most two primary patterns unless the material truly demands more.
+Choose the pattern that best matches the reader's job. Patterns are starting
+shapes, not templates: they do not prescribe a palette, type system, navigation
+model, or component vocabulary. Combine at most two primary patterns unless the
+material truly demands more. Define a custom composition when none fits.
+
+## Contents
+
+- Patterns 1–5: editorial brief through project command map
+- Patterns 6–10: comparative lens through custom composition
+- [Choose navigation independently](#choose-navigation-independently)
+- [Define the fingerprint](#define-the-fingerprint)
+- [Selection heuristic](#selection-heuristic)
 
 ## 1. Editorial brief
 
@@ -39,7 +50,8 @@ Do not turn this into a generic KPI dashboard. Every visual element must help th
 Use for long PRDs, platform specs, policy documents, or multi-module plans.
 
 Structure:
-- persistent table of contents
+- visible table of contents; make it persistent only when repeated lookup
+  justifies the lost canvas
 - overview map
 - sections by capability or domain
 - requirement IDs and acceptance criteria
@@ -139,6 +151,54 @@ Structure:
 
 Interaction can reveal layers, but core understanding must not require clicking everything.
 
+## 10. Custom composition
+
+Use when the source has a distinctive shape that the named patterns would
+flatten: an investigative case file, annotated transcript, operational runbook,
+visual essay, evidence wall, or another purpose-built form.
+
+Before building, state the custom composition internally in one sentence:
+
+> A [reader job] organized as [dominant spatial model], with [navigation model]
+> and [one memorable mechanism].
+
+Borrow individual techniques from the named patterns, but keep one dominant
+reading path. Custom means source-shaped, not unstructured.
+
+## Choose navigation independently
+
+Navigation follows lookup behavior, not the chosen pattern's name:
+
+- **No persistent navigation:** short or strongly linear artifacts with roughly
+  five or fewer major sections.
+- **Inline contents or top index:** medium documents read mostly front to back.
+- **Sticky section bar:** a small set of peer sections where quick switching
+  matters and labels remain short.
+- **Side rail:** lookup-heavy references, atlases, or cross-linked documents
+  with enough sections to justify constant orientation. Verify it at
+  1024–1280px and make it collapsible when it materially narrows the content.
+- **View switcher or filters:** repeated structured items where changing the
+  visible slice is the reader's actual task.
+
+Choose a sidebar only under the side-rail criteria above; use the lighter
+navigation models for the other reading paths.
+
+## Define the fingerprint
+
+After choosing a pattern, make contextual choices on these independent axes:
+
+- composition and section rhythm
+- navigation model
+- typography roles and contrast
+- palette temperature, lightness, and chroma
+- surface treatment and density
+- diagram or evidence language
+- interaction and motion
+
+If related artifacts from this project or session are visible, compare their
+fingerprints. A different reader job should normally change at least two axes;
+continuity inside a shared design system is a valid reason not to.
+
 ## Selection heuristic
 
 Ask which cognitive task dominates:
@@ -150,3 +210,4 @@ Ask which cognitive task dominates:
 - inspection and remediation → review workbench
 - reuse and consistency → living design reference
 - learning → guided explainer
+- none fits without distortion → custom composition

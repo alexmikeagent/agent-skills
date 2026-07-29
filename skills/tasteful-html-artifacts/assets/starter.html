@@ -3,223 +3,238 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light dark">
-  <title>Artifact title</title>
+  <title>Replace with the artifact title</title>
   <style>
+    /*
+      PORTABILITY SCAFFOLD — NOT A VISUAL DIRECTION
+
+      Keep the reset, wrapping, focus, reduced-motion, and print safeguards.
+      Replace the composition, navigation model, palette, type system, spacing
+      rhythm, and content after committing the artifact's fingerprint.
+    */
     :root {
-      --canvas: #f4f1ea;
-      --surface: #fbfaf6;
-      --ink: #171816;
-      --muted: #666a63;
-      --rule: #cfcac0;
-      --accent: #a4412e;
-      --accent-soft: #ead8d1;
-      --radius: 6px;
-      --measure: 72ch;
-      --shadow: 0 14px 38px rgba(20, 20, 18, .08);
+      --canvas: #ffffff;
+      --surface: #f5f5f3;
+      --ink: #181918;
+      --muted: #595d59;
+      --rule: #d6d8d5;
+      --focus: #005fcc;
+      --measure: 70ch;
+      --page-gutter: clamp(1rem, 4vw, 4rem);
     }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
       background: var(--canvas);
       color: var(--ink);
-      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.58;
+      font-family: system-ui, sans-serif;
+      line-height: 1.55;
     }
-    a { color: inherit; text-decoration-thickness: .08em; text-underline-offset: .18em; }
-    :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
-    code {
-      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+
+    img,
+    picture,
+    video,
+    canvas,
+    svg {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+
+    a {
+      color: inherit;
+      text-underline-offset: 0.18em;
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    :where(h1, h2, h3, p, li, th, td, code, pre, a) {
       overflow-wrap: anywhere;
-      word-break: break-word;
     }
-    svg { display: block; width: 100%; height: auto; }
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
+
+    :where(.artifact, header, section, footer, div, article, aside, nav) {
+      min-width: 0;
     }
-    .shell {
-      display: grid;
-      grid-template-columns: minmax(13rem, 18rem) minmax(0, 1fr);
-      min-height: 100vh;
-      transition: grid-template-columns .2s ease;
+
+    code,
+    pre {
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
     }
-    nav {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      padding: 2rem 1.25rem;
-      border-right: 1px solid var(--rule);
+
+    pre {
+      max-width: 100%;
       overflow: auto;
+      white-space: pre-wrap;
     }
-    .nav-toggle {
-      display: grid;
-      width: 2.35rem;
-      height: 2.35rem;
-      margin: 0 0 1rem auto;
-      padding: 0;
-      place-items: center;
-      border: 1px solid var(--rule);
-      background: var(--surface);
-      color: var(--ink);
-      font: inherit;
-      font-size: 1.2rem;
-      cursor: pointer;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
     }
-    nav strong { display: block; margin-bottom: 1rem; }
-    nav a { display: block; padding: .45rem 0; color: var(--muted); text-decoration: none; }
-    nav a:hover, nav a[aria-current="true"] { color: var(--ink); }
-    main { min-width: 0; }
-    header {
-      display: grid;
-      align-content: start;
-      padding: clamp(2.25rem, 5vw, 4.75rem) clamp(2rem, 7vw, 7rem);
-      border-bottom: 1px solid var(--rule);
+
+    th,
+    td {
+      padding: 0.75rem;
+      text-align: left;
+      vertical-align: top;
+      border-block-end: 1px solid var(--rule);
     }
-    .eyebrow {
-      color: var(--accent);
-      font-weight: 700;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      font-size: .78rem;
+
+    .skip-link {
+      position: fixed;
+      inset: 0.75rem auto auto 0.75rem;
+      z-index: 1000;
+      padding: 0.65rem 0.8rem;
+      background: var(--ink);
+      color: var(--canvas);
+      transform: translateY(-180%);
     }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    /*
+      These rules keep the scaffold readable before a direction is applied.
+      They are deliberately neutral and should not survive by accident.
+    */
+    .artifact {
+      width: min(100%, 88rem);
+      margin-inline: auto;
+      padding-inline: var(--page-gutter);
+    }
+
+    header,
+    section,
+    footer {
+      padding-block: clamp(2rem, 6vw, 5rem);
+    }
+
+    section,
+    footer {
+      border-block-start: 1px solid var(--rule);
+    }
+
+    h1,
+    h2 {
+      margin-block: 0 0.75rem;
+      line-height: 1.08;
+    }
+
     h1 {
-      max-width: 14ch;
-      margin: .5rem 0 1rem;
-      font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif;
-      font-size: clamp(3rem, 8vw, 7.5rem);
-      line-height: .92;
-      letter-spacing: -.055em;
-      font-weight: 650;
+      max-width: 18ch;
+      font-size: clamp(2.25rem, 6vw, 4rem);
     }
-    .lede { max-width: 58ch; font-size: clamp(1.1rem, 2vw, 1.45rem); color: var(--muted); }
-    section { padding: clamp(2rem, 6vw, 6rem); border-bottom: 1px solid var(--rule); }
-    .section-grid { display: grid; grid-template-columns: minmax(10rem, 1fr) minmax(0, 2.4fr); gap: clamp(1.5rem, 5vw, 5rem); }
-    .section-grid > * { min-width: 0; }
-    h2 { margin-top: 0; font-size: clamp(1.7rem, 3vw, 2.6rem); line-height: 1.08; letter-spacing: -.025em; }
-    .content { max-width: var(--measure); }
-    .callout {
-      margin: 2rem 0;
-      padding: 1.25rem 1.4rem;
-      border-left: 5px solid var(--accent);
-      background: var(--accent-soft);
+
+    h2 {
+      font-size: clamp(1.5rem, 3vw, 2.25rem);
     }
-    table { width: 100%; border-collapse: collapse; font-size: .95rem; }
-    th, td { text-align: left; vertical-align: top; padding: .8rem; border-bottom: 1px solid var(--rule); }
-    th { font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; }
-    .tag { display: inline-block; border: 1px solid currentColor; padding: .12rem .45rem; font-size: .75rem; border-radius: 999px; }
-    footer { padding: 2rem clamp(2rem, 6vw, 6rem); color: var(--muted); }
-    @media (min-width: 781px) {
-      .shell.nav-collapsed { grid-template-columns: 3.75rem minmax(0, 1fr); }
-      .shell.nav-collapsed nav { padding: .75rem .7rem; overflow: hidden; }
-      .shell.nav-collapsed .nav-toggle { margin-inline: auto; }
-      .shell.nav-collapsed nav strong,
-      .shell.nav-collapsed nav a { display: none; }
+
+    .prose {
+      max-width: var(--measure);
     }
-    @media (max-width: 780px) {
-      .shell { display: block; }
-      nav { position: relative; height: auto; border-right: 0; border-bottom: 1px solid var(--rule); }
-      .nav-toggle { display: none; }
-      .section-grid { grid-template-columns: 1fr; }
-      header { min-height: auto; }
+
+    .muted {
+      color: var(--muted);
     }
+
     @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
     }
+
     @media print {
-      nav, .no-print { display: none !important; }
-      .shell { display: block; }
-      body { background: white; color: black; }
-      header, section { padding: 1.2rem 0; break-inside: avoid; }
-      a { text-decoration: none; }
+      @page {
+        margin: 18mm;
+      }
+
+      body {
+        background: #ffffff;
+        color: #000000;
+      }
+
+      .skip-link,
+      .no-print {
+        display: none !important;
+      }
+
+      .artifact {
+        width: auto;
+        padding: 0;
+      }
+
+      header,
+      section,
+      footer {
+        padding-block: 0.8rem;
+      }
+
+      h1,
+      h2,
+      h3 {
+        break-after: avoid;
+      }
+
+      table,
+      figure,
+      pre,
+      blockquote {
+        break-inside: avoid;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="shell">
-    <nav aria-label="Document sections">
-      <button class="nav-toggle no-print" type="button" aria-controls="artifact-navigation-links" aria-expanded="true" title="Collapse navigation">
-        <span aria-hidden="true">‹</span>
-        <span class="sr-only">Collapse navigation</span>
-      </button>
-      <strong>Artifact title</strong>
-      <div id="artifact-navigation-links">
-        <a href="#overview">Overview</a>
-        <a href="#details">Details</a>
-        <a href="#decisions">Decisions</a>
-      </div>
-    </nav>
-    <main>
-      <header id="overview">
-        <div class="eyebrow">Document type · Status</div>
-        <h1>A thesis, not a template.</h1>
-        <p class="lede">Replace this with the shortest accurate statement of what the reader needs to understand and do.</p>
-      </header>
-      <section id="details">
-        <div class="section-grid">
-          <div><h2>Core material</h2></div>
-          <div class="content">
-            <p>Use real source content. Choose representations based on meaning.</p>
-            <aside class="callout"><strong>Key point:</strong> Reserve callouts for genuinely consequential information.</aside>
-          </div>
-        </div>
-      </section>
-      <section id="decisions">
-        <div class="section-grid">
-          <div><h2>Decisions</h2></div>
-          <div class="content">
-            <table>
-              <thead><tr><th>Decision</th><th>Rationale</th><th>Status</th></tr></thead>
-              <tbody><tr><td>Example</td><td>Replace with source-grounded reasoning.</td><td><span class="tag">Open</span></td></tr></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-      <footer>Generated from source material · Verify critical details against the original.</footer>
-    </main>
-  </div>
-  <script>
-    const shell = document.querySelector('.shell');
-    const navToggle = document.querySelector('.nav-toggle');
-    const navStateKey = 'artifact-nav-collapsed';
-    const setNavCollapsed = collapsed => {
-      shell?.classList.toggle('nav-collapsed', collapsed);
-      if (!navToggle) return;
-      navToggle.setAttribute('aria-expanded', String(!collapsed));
-      navToggle.setAttribute('title', collapsed ? 'Expand navigation' : 'Collapse navigation');
-      navToggle.querySelector('[aria-hidden="true"]').textContent = collapsed ? '›' : '‹';
-      navToggle.querySelector('.sr-only').textContent = collapsed ? 'Expand navigation' : 'Collapse navigation';
-    };
-    let navCollapsed = false;
-    try { navCollapsed = localStorage.getItem(navStateKey) === 'true'; } catch {}
-    setNavCollapsed(navCollapsed);
-    navToggle?.addEventListener('click', () => {
-      navCollapsed = !shell?.classList.contains('nav-collapsed');
-      setNavCollapsed(navCollapsed);
-      try { localStorage.setItem(navStateKey, String(navCollapsed)); } catch {}
-    });
+  <a class="skip-link" href="#main">Skip to content</a>
 
-    const links = [...document.querySelectorAll('nav a[href^="#"]')];
-    const sections = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
-    if ('IntersectionObserver' in window) {
-      const observer = new IntersectionObserver(entries => {
-        const visible = entries.filter(e => e.isIntersecting).sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (!visible) return;
-        links.forEach(a => a.removeAttribute('aria-current'));
-        const active = links.find(a => a.getAttribute('href') === `#${visible.target.id}`);
-        if (active) active.setAttribute('aria-current', 'true');
-      }, { rootMargin: '-20% 0px -65% 0px', threshold: [0, .2, .6] });
-      sections.forEach(section => observer.observe(section));
-    }
-  </script>
+  <!--
+    Replace this sample structure after selecting the artifact pattern.
+    Choose no navigation, an inline index, a top bar, a side rail, filters, or
+    another model according to the source architecture.
+  -->
+  <main class="artifact" id="main">
+    <header>
+      <h1>Replace with the source-grounded thesis</h1>
+      <p class="prose muted">
+        Replace with the shortest accurate orientation: what this is, why it
+        matters, the current conclusion or state, and what the reader should do.
+      </p>
+    </header>
+
+    <section id="core" aria-labelledby="core-title">
+      <h2 id="core-title">Replace with a meaningful section</h2>
+      <div class="prose">
+        <p>Replace this sample structure with the representation the source needs.</p>
+      </div>
+    </section>
+
+    <footer>
+      <p class="prose muted">
+        Replace with useful provenance, verification context, or source notes.
+      </p>
+    </footer>
+  </main>
 </body>
 </html>

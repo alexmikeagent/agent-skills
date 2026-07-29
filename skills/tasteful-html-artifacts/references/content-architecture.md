@@ -2,6 +2,16 @@
 
 The transformation succeeds when structure reflects meaning.
 
+## Contents
+
+- [First-pass extraction](#first-pass-extraction)
+- [Design the reading layers](#design-the-reading-layers)
+- [Re-representation choices](#re-representation-choices)
+- [Source fidelity](#source-fidelity)
+- [Long-document navigation](#long-document-navigation)
+- [Density management](#density-management)
+- [Traceability](#traceability)
+
 ## First-pass extraction
 
 Capture:
@@ -78,11 +88,16 @@ When synthesizing multiple documents:
 ## Long-document navigation
 
 For artifacts with more than roughly five major sections:
-- provide a visible table of contents
-- indicate current section
+- provide a visible overview or table of contents in a form that matches the
+  reading path
+- indicate the current section when navigation remains persistent
 - support anchor links
-- add “back to top” or equivalent context-preserving navigation
+- add “back to top,” a section index, or another context-preserving return path
 - enable browser search through real text, not canvas-rendered text
+
+Choose the navigation model after the section architecture is known. Linear
+documents often need only an inline index; lookup-heavy references may earn a
+sticky top bar or side rail.
 
 ## Density management
 
