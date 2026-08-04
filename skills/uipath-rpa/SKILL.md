@@ -40,6 +40,7 @@ Read the selected reference in full. Use [reference-map.md](references/reference
 - Preserve the sibling anchor's XAML form; do not regenerate an unaffected workflow.
 - Prefer native UiPath activities and explicit typed Assigns for business logic.
 - Give containers and actions business-readable `DisplayName` values.
+- Keep argument names at 30 characters or fewer (`ST-NMG-016`) and variable names at 30 characters or fewer (`ST-NMG-008`). Preserve direction/type prefixes, shorten the descriptive portion, and update all expressions, invoke bindings, Main sidecars, and entry-point metadata when renaming.
 - Add PHI-safe start/end and narrative decision logs; use counts, flags, and reason codes rather than raw transaction data.
 - Keep every `WorkflowViewState.IdRef` unique.
 - Keep entry-point XAML, sidecars, and `entry-points.json` synchronized.
@@ -51,6 +52,8 @@ For test replacement, add and register the replacement before deleting the super
 Before any test deletion, run the affected L1 scope with `--require-registered-tests`. `META003` is otherwise a warning for legacy compatibility; this flag makes an unregistered `TC_*.xaml` an error.
 
 Completion criterion: one reviewable slice is implemented, all affected contracts remain intentional, and replacement coverage exists before removals.
+
+Run the static audit before handoff; it reports overlong arguments and variables using the corresponding Workflow Analyzer rule codes.
 
 ## 4. Run explicit validation gates
 

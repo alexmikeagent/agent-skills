@@ -28,7 +28,12 @@ from .reporting import text_report, validation_result, write_json
 from .runners.parallels import ParallelsRunner, new_request
 from .workflow_graph import dumps as map_json
 from .workflow_graph import mermaid, project_map
-from .xaml_parser import duplicate_id_refs, parse_workflow, serialization_findings
+from .xaml_parser import (
+    duplicate_id_refs,
+    naming_findings,
+    parse_workflow,
+    serialization_findings,
+)
 
 
 SKILL_ROOT = Path(__file__).resolve().parents[2]
@@ -273,6 +278,7 @@ def run_audit(args: argparse.Namespace) -> int:
                 )
             )
         findings.extend(check_workflow(workflow))
+        findings.extend(naming_findings(workflow))
         findings.extend(validate_policy(workflow, policy))
         findings.extend(serialization_findings(project_root, workflow, workflows))
     findings.extend(check_line_endings(project_root, scoped_paths))

@@ -42,10 +42,11 @@ Work in this order; do not jump to bulk rewrites:
 2. **Control flow skeleton** — Sequences / If / TryCatch with real `DisplayName`s
 3. **Assign-heavy logic** — one Assign per target, expanded form
 4. **Storytelling logs** — branch/decision/outcome logs (PHI-safe)
-5. **Expression contracts** — when an expression uses `scg:List(...)`, `List(Of T)`, or LINQ `.ToList()`, copy `System.Collections.Generic` into `TextExpression.NamespacesForImplementation` and the `System.Collections`, `System.Core`, and `System.ObjectModel` assembly references from the Studio-readable anchor. `xmlns:scg` alone does not import `List` into the VB expression compiler.
-6. **IdRef uniqueness** — every new activity gets a unique `WorkflowViewState.IdRef`
-7. **Static gate** — §7 checks on touched files only
-8. Report: Mac static checks passed; Windows Studio compile still required
+5. **Analyzer-safe identifiers** — arguments and variables must be 30 characters or fewer by default. Retain direction/type prefixes, shorten the descriptive portion, and update every caller and sidecar when renaming.
+6. **Expression contracts** — when an expression uses `scg:List(...)`, `List(Of T)`, or LINQ `.ToList()`, copy `System.Collections.Generic` into `TextExpression.NamespacesForImplementation` and the `System.Collections`, `System.Core`, and `System.ObjectModel` assembly references from the Studio-readable anchor. `xmlns:scg` alone does not import `List` into the VB expression compiler.
+7. **IdRef uniqueness** — every new activity gets a unique `WorkflowViewState.IdRef`
+8. **Static gate** — §7 checks on touched files only
+9. Report: Mac static checks passed; Windows Studio compile still required
 
 Prefer **targeted edits** over regenerating whole workflows. Do not re-indent or reserialize the entire file.
 
@@ -241,6 +242,8 @@ For native business-rule cleanup, replace `baseline` with `native-business-rules
 - [ ] Container bodies wrapped in Sequence; no compact style drift
 - [ ] Unique IdRefs on new activities
 - [ ] Main/entry sidecars updated if arguments changed
+- [ ] Argument names are at most 30 characters (`ST-NMG-016`)
+- [ ] Variable names are at most 30 characters (`ST-NMG-008`)
 - [ ] Invoke contracts verified (`/` + `\\`)
 - [ ] Line endings match the file
 - [ ] §7 static gate green on touched files

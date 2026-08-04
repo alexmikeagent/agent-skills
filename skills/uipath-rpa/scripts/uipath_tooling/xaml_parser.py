@@ -186,6 +186,39 @@ def duplicate_id_refs(workflow: WorkflowInfo) -> list[str]:
     return sorted(value for value, count in counts.items() if count > 1)
 
 
+def naming_findings(
+    workflow: WorkflowInfo, maximum_length: int = 30
+) -> list[Finding]:
+    """Report UiPath's default argument and variable name length findings."""
+    findings: list[Finding] = []
+    rules = {
+        "Property": ("ST-NMG-016", "argument"),
+        "Variable": ("ST-NMG-008", "variable"),
+    }
+    for element in workflow.root.iter():
+        element_name = local_name(element.tag)
+        if element_name not in rules:
+            continue
+        identifier = attribute(element, "Name") or ""
+        if len(identifier) <= maximum_length:
+            continue
+        code, kind = rules[element_name]
+        findings.append(
+            Finding(
+                code,
+                "warning",
+                f"{kind.capitalize()} name exceeds {maximum_length} characters: "
+                f"{identifier} ({len(identifier)})",
+                workflow.relative_path,
+                remediation=(
+                    f"Shorten the {kind} name to {maximum_length} characters or fewer "
+                    "and update every expression, invoke binding, and entry-point sidecar."
+                ),
+            )
+        )
+    return findings
+
+
 def serialization_findings(
     project_root: Path,
     workflow: WorkflowInfo,
