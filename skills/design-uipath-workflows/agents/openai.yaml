@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design UiPath Workflows"
+  short_description: "Apply concise UiPath XAML design standards"
+  default_prompt: "Use $design-uipath-workflows to design or audit this UiPath XAML workflow against the global style standard."
