@@ -155,36 +155,46 @@ def _parse_workflows(project_root: Path) -> tuple[dict[str, Any], list[Finding]]
     return workflows, findings
 
 
-def _git_diff_findings(project_root: Path) -> list[Finding]:
-    try:
-        completed = subprocess.run(
-            [
-                "git",
-                "-C",
-                str(project_root),
-                "-c",
-                "core.whitespace=cr-at-eol",
-                "diff",
-                "--check",
-            ],
-            check=False,
-            capture_output=True,
-            text=True,
-        )
-    except OSError:
+def _git_diff_findings(
+    project_root: Path, scoped_paths: list[Path], scope: str
+) -> list[Finding]:
+    relative_paths = [relative(project_root, path) for path in scoped_paths]
+    if not relative_paths:
         return []
-    if completed.returncode == 0:
-        return []
-    return [
-        Finding(
-            "GIT001",
-            "error",
-            line,
-            remediation="Resolve the diff-check finding without converting intentional CRLF XAML.",
+    modes = [["--cached"]] if scope == "staged" else [[], ["--cached"]]
+    findings: list[Finding] = []
+    for mode in modes:
+        try:
+            completed = subprocess.run(
+                [
+                    "git",
+                    "-C",
+                    str(project_root),
+                    "-c",
+                    "core.whitespace=cr-at-eol",
+                    "diff",
+                    *mode,
+                    "--check",
+                    "--",
+                    *relative_paths,
+                ],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+        except OSError:
+            return findings
+        findings.extend(
+            Finding(
+                "GIT001",
+                "error",
+                line,
+                remediation="Resolve the scoped diff-check finding without converting intentional CRLF XAML.",
+            )
+            for line in completed.stdout.splitlines()
+            if line
         )
-        for line in completed.stdout.splitlines()
-        if line
-    ]
+    return findings
 
 
 def run_inspect(args: argparse.Namespace) -> int:
@@ -253,7 +263,18 @@ def run_audit(args: argparse.Namespace) -> int:
     policy = load_policy(SKILL_ROOT, args.policy)
     scoped_paths = scoped_xaml(project_root, args.scope, args.files)
     scoped = {relative(project_root, path) for path in scoped_paths}
+    expression_language = str(project.get("expressionLanguage", "")).lower()
+    uses_visual_basic = expression_language in {"visualbasic", "vb"}
     workflows, findings = _parse_workflows(project_root)
+    if not uses_visual_basic and expression_language not in {"csharp", "c#"}:
+        findings.append(
+            Finding(
+                "CFG001",
+                "warning",
+                "Expression language is missing or unrecognized; language-specific expression heuristics were not run",
+                "project.json",
+            )
+        )
     if not scoped_paths:
         findings.append(
             Finding(
@@ -277,7 +298,8 @@ def run_audit(args: argparse.Namespace) -> int:
                     relative_path,
                 )
             )
-        findings.extend(check_workflow(workflow))
+        if uses_visual_basic:
+            findings.extend(check_workflow(workflow))
         findings.extend(naming_findings(workflow))
         findings.extend(validate_policy(workflow, policy))
         findings.extend(serialization_findings(project_root, workflow, workflows))
@@ -290,7 +312,7 @@ def run_audit(args: argparse.Namespace) -> int:
             require_registered_tests=args.require_registered_tests,
         )
     )
-    findings.extend(_git_diff_findings(project_root))
+    findings.extend(_git_diff_findings(project_root, scoped_paths, args.scope))
     findings.sort(key=lambda item: (item.file or "", item.code, item.message))
     result = validation_result(project, findings, sorted(scoped), started)
     if args.json_out:

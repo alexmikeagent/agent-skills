@@ -15,7 +15,7 @@ Package, node vocabulary, gateway patterns, and suspend/resume for Long Running 
 
 LRW node types ship in **`UiPath.FlowchartBuilder.Activities`** (runtime assembly `UiPath.Process.Activities` — the `upa`/`upas` xmlns target). Mandatory dependency for any workflow containing `upa:ProcessDiagram`; the runtime pair `UiPath.FlowchartBuilder.Activities.Runtime` resolves automatically. Not supported on `targetFramework: "Legacy"`. Studio creates LRW projects with this package plus `UiPath.System.Activities`.
 
-Install per Common Rule 6 and SKILL.md § Resolving Packages before authoring:
+Resolve the installed package and obtain approval before adding or upgrading it:
 
 ```bash
 uip rpa packages versions --package-id UiPath.FlowchartBuilder.Activities --include-prerelease --project-dir "<PROJECT_DIR>" --output json

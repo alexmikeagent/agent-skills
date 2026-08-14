@@ -23,12 +23,9 @@ def test_policy_json_files_parse(skill_root: Path) -> None:
 
 def test_skill_relative_markdown_links_resolve(skill_root: Path) -> None:
     paths = [
-        skill_root / "SKILL.md",
-        skill_root / "references" / "code-mode-playbook.md",
-        skill_root / "references" / "validation-contract.md",
-        skill_root / "references" / "parallels-windows-bridge.md",
-        skill_root / "references" / "reference-map.md",
-        skill_root / "references" / "xaml" / "behavior-preserving-refactors.md",
+        path
+        for path in skill_root.rglob("*.md")
+        if "legacy" not in path.parts and "activity-docs" not in path.parts
     ]
     missing = []
     for path in paths:
@@ -43,12 +40,30 @@ def test_skill_relative_markdown_links_resolve(skill_root: Path) -> None:
     assert missing == []
 
 
-def test_visual_guide_has_accessible_interaction_contract(skill_root: Path) -> None:
+def test_canonical_references_do_not_point_to_vanished_skill_rules(
+    skill_root: Path,
+) -> None:
+    stale = re.compile(
+        r"SKILL (?:Rule|§)|Common Rule|Critical Rules|Validation Iteration Loop|#validation-iteration-loop"
+    )
+    findings = []
+    for path in (skill_root / "references").rglob("*.md"):
+        if "legacy" in path.parts or "activity-docs" in path.parts:
+            continue
+        if stale.search(path.read_text(encoding="utf-8")):
+            findings.append(path.relative_to(skill_root).as_posix())
+    assert findings == []
+
+
+def test_windows_runner_verifies_snapshot_manifest(skill_root: Path) -> None:
     source = (
-        skill_root / "assets" / "visual-guides" / "uipath-tooling-improvement-plan.html"
-    ).read_text()
-    assert '<meta name="viewport"' in source
-    assert 'role="tablist"' in source
-    assert "prefers-reduced-motion" in source
-    assert "@media print" in source
-    assert '<title id="flow-title">' in source
+        skill_root / "scripts" / "windows" / "Invoke-UiPathValidation.ps1"
+    ).read_text(encoding="utf-8")
+    for marker in (
+        ".uipath-snapshot.json",
+        "Get-FileHash",
+        "WIN013",
+        "WIN014",
+        "WIN015",
+    ):
+        assert marker in source

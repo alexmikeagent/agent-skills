@@ -21,6 +21,8 @@ Allowed states are `passed`, `failed`, `blocked`, and `not_run`.
 | 3 | Windows capability blocked |
 | 4 | Unsafe execution refused |
 
+`build-and-test` passes only when compile succeeds and at least one selected test runs and passes. Missing, malformed, wrong-job, or contract-invalid result JSON is a tool error (2), not a validation failure (1).
+
 ## Result interface
 
 `assets/schemas/validation-result-v1.schema.json` is authoritative. Findings carry a stable code, severity, message, gate, file when known, activity IdRef when known, evidence, and remediation. Generated logs and results belong under the transient job root, never the UiPath source repository.

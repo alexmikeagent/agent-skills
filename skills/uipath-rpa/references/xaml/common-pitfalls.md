@@ -239,7 +239,7 @@ XML-valid workflows can still force Windows Studio to mass-reserialize or auto-r
 
 | Gap agents leave | What Studio repairs | Prevention |
 |------------------|---------------------|------------|
-| New `Main.xaml` argument only in XAML | Adds arg to `Main.xaml.json` + `entry-points.json` | Update all three together (SKILL Rule 26) |
+| New entry-point argument only in XAML | Active project metadata no longer matches | Update `project.json` and only the sidecar/`entry-points.json` surfaces the project actually uses |
 | Stale component path in `entry-points.json` | Removes dead entry points | Keep entry-points aligned to active process entry only |
 | New component with sparse assembly refs | Adds refs (`System.Linq.Expressions`, `System.ComponentModel.*`, project `GlobalVariables*`, …) | Clone reference set from a sibling component in the same project |
 | Modern `ExcelProcessScopeX` missing null defaults | Adds `DisplayAlerts`, `ExistingProcessAction`, `FileConflictResolution`, `LaunchMethod`, `LaunchTimeout`, `MacroSettings`, `ProcessMode` as `{x:Null}` | Emit the full Studio skeleton when adding Excel process scope |
@@ -631,7 +631,7 @@ Activity-level mechanics below. For the expression/code layer (LINQ filter/sort/
 Activity properties typed as enums (e.g. `Operator`, `ClickType`, `KeyModifiers`, `EmptyFieldMode`, comparison/filter strategies) are checked at compile time against the activity's enum, **not** during `validate` static analysis. An invalid identifier on an enum-typed attribute returns "no diagnostics found" from `validate` and surfaces only at `build` / `CacheMetadata` time. Two consequences:
 
 1. Always read `{projectRoot}/.local/docs/packages/<PackageId>/activities/<Activity>.md` for the exact, package-version-specific enum members before authoring an enum-valued attribute. Do not infer values from naming intuition or from prose in this skill.
-2. Always run `uip rpa build` after `validate` clears — it is the only validator that catches invalid enum identifiers (see [../validation-guide.md § Validation Iteration Loop](../validation-guide.md#validation-iteration-loop)).
+2. Run the applicable compile gate after source validation clears; compile catches invalid enum identifiers that heuristics cannot (see [../validation-guide.md § Fix loop](../validation-guide.md#fix-loop)).
 
 ## Package Version Changes Break XAML
 

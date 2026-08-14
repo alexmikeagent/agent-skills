@@ -17,6 +17,12 @@ Use `scripts/uipath_tool.py inspect` for the structural map. Characterization te
 
 Create a workflow boundary when a block has a distinct business purpose, inputs/outputs that can be named clearly, and focused tests. Do not split solely to reduce line count. Keep leaf business rules free of orchestration when the project convention places orchestration in the caller.
 
+## Simplify without hiding behavior
+
+Inventory outputs and side effects before reducing activities. Remove only proven redundant work. Use Multi Assign for cohesive initialization or defaults when the Studio/package anchor supports it; keep decisions, external actions, retries, and postconditions visibly separate. The parity suite must show that the same inputs still reach the same externally visible results.
+
+Treat REFramework state placement as part of the contract. Before moving work across states, prove equivalent initialization frequency, transaction scope, retry and exception routing, cleanup, and application lifetime against the active template.
+
 ## Replacement sequence
 
 1. Add characterization cases for success, every primary failure reason, boundaries, and exceptions.
@@ -30,7 +36,7 @@ Create a workflow boundary when a block has a distinct business purpose, inputs/
 
 ## Native business-rule shape
 
-Use Assign, If, loops, Break, Continue, Add Data Column, Add Data Row, and other native activities. Use PHI-safe start/end logs and narrative logs after state-changing actions. Preserve exact decision precedence and transaction disposition.
+Use Assign, Multi Assign for cohesive defaults, If, loops, Break, Continue, Add Data Column, Add Data Row, and other native activities. Use sensitive-data-safe boundary logs plus meaningful decision, side-effect, retry, and outcome logs; avoid narrating routine initialization. Preserve exact decision precedence and transaction disposition.
 
 ## Parity evidence
 

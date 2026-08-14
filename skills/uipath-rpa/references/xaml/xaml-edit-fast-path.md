@@ -28,7 +28,7 @@ Read this whole file before editing. For greenfield activity discovery, Flowchar
    - Argument/variable naming prefixes
    - Whether `sap2010:WorkflowViewState.IdRef` and `HintSize` are present
    - Line endings (CRLF vs LF) of the file you will edit
-4. On the user's Mac, **do not** run `uip rpa validate` / `build` / `run` / analyzer (see SKILL.md **Host Reality**). Plan the static gate in §7 instead.
+4. Read `targetFramework` and probe the installed `uip --version` plus the relevant live `--help`. Use the capability matrix in [validation-guide.md](../validation-guide.md); do not infer build/runtime support from host OS alone.
 
 Do **not** invent a new house style. Match the anchor.
 
@@ -42,7 +42,7 @@ Work in this order; do not jump to bulk rewrites:
 2. **Control flow skeleton** — Sequences / If / TryCatch with real `DisplayName`s
 3. **Assign-heavy logic** — one Assign per target, expanded form
 4. **Storytelling logs** — branch/decision/outcome logs (PHI-safe)
-5. **Analyzer-safe identifiers** — arguments and variables must be 30 characters or fewer by default. Retain direction/type prefixes, shorten the descriptive portion, and update every caller and sidecar when renaming.
+5. **Analyzer-safe identifiers** — honor the project's analyzer configuration. If no override exists, ST-NMG-008 uses 30 characters as the default variable-name limit. Retain direction/type prefixes, shorten the descriptive portion, and update every caller and active metadata surface when renaming.
 6. **Expression contracts** — when an expression uses `scg:List(...)`, `List(Of T)`, or LINQ `.ToList()`, copy `System.Collections.Generic` into `TextExpression.NamespacesForImplementation` and the `System.Collections`, `System.Core`, and `System.ObjectModel` assembly references from the Studio-readable anchor. `xmlns:scg` alone does not import `List` into the VB expression compiler.
 7. **IdRef uniqueness** — every new activity gets a unique `WorkflowViewState.IdRef`
 8. **Static gate** — §7 checks on touched files only
@@ -128,7 +128,7 @@ Log **counts, booleans, reason codes, hashes, capped lengths, cache hit/miss, sa
 | `Warn` | Recoverable fallback / degraded path / retry |
 | `Error` | About to throw or map to system-exception path |
 
-Workflow-emitted `Error` logs are **observability**, not the CLI success verdict (SKILL Common Rule 8a).
+Workflow-emitted `Error` logs are **observability**, not the CLI success verdict.
 
 ### 3.3 Naming
 
@@ -165,9 +165,9 @@ Match the file you edit. Many Windows Studio projects use **CRLF**. After patchi
 When you add/rename/remove an argument on the **process entry point** (`Main.xaml` or the active entry workflow):
 
 1. Update the XAML `<x:Members>` (+ root default via `this:Class.arg` if needed).
-2. Update **`Main.xaml.json`** (or `<Entry>.xaml.json`) `Arguments[]` entry (`Name`, `DisplayName`, `IsPrincipal`, etc.).
-3. Update **`entry-points.json`** input schema/default for that argument.
-4. Keep `entry-points.json` aligned to **active** entry points only — remove stale component paths Studio no longer publishes as entries.
+2. Update `project.json.entryPoints` where the project uses it.
+3. Update **`Main.xaml.json`** (or `<Entry>.xaml.json`) where that sidecar exists or the current Studio-generated sibling establishes it.
+4. Update **`entry-points.json`** only when it is an active project surface. Do not create or restore this optional file solely by convention.
 
 XML-only edits that skip sidecars are a top cause of "opens in Studio and auto-fixes half the repo."
 
@@ -197,7 +197,7 @@ Copy structure from a sibling usage in the same project when possible. Known rep
 
 ---
 
-## 7. Static verification gate (Mac default)
+## 7. Static verification gate
 
 Run the collocated validator on touched files after the edit pass. Do not recreate this gate as ad hoc shell snippets.
 

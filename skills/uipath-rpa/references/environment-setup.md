@@ -63,7 +63,7 @@ uip rpa init \
   --output json
 ```
 
-**Decide `--target-framework` and `--expression-language` before running — never omit them.** Both are immutable after creation; omitting `--target-framework` silently produces a **Windows** project. The placeholder shows the two new-project options (`Windows`, `Portable`). Windows - Legacy is a last resort (explicit ask or hard .NET 4.6.1 need) and is created/authored in **Legacy mode**, not via this command. Choose from runtime / host-OS signals per SKILL.md Common Rule 2a.
+**Decide `--target-framework` and `--expression-language` before running — never omit them.** Treat both as public migration decisions after creation. The placeholder shows the two new-project options (`Windows`, `Portable`). Windows - Legacy is a last resort (explicit ask or hard .NET Framework need) and is created/authored in **Legacy mode**, not via this command. Choose from the target systems, installed toolchain, and current official CLI contract.
 
 **Expression language:** Default `VisualBasic`. Use `CSharp` only when the user explicitly asks for C# expressions inside XAML activities.
 

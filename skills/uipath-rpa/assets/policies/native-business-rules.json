@@ -7,26 +7,18 @@
   ],
   "leaf_forbid_invoke_workflow": true,
   "require_boundary_logs": true,
-  "log_after_activities": [
-    "Assign",
-    "AddDataColumn",
-    "AddDataRow"
-  ],
+  "log_after_activities": [],
   "require_expanded_assign": true,
-  "max_activity_count": 180,
-  "max_depth": 32,
-  "phi_sensitive_tokens": [
-    "strpatientno",
-    "strguarantor",
-    "strcapturedcomments",
-    "rawline",
-    "in_transactionitem"
-  ],
-  "phi_safe_markers": [
-    "identifierlogged=false",
-    "identifiersanddateslogged=false",
-    "rawcontentlogged=false",
-    "sensitivedata=false"
+  "sensitive_tokens": [
+    "password",
+    "secret",
+    "token",
+    "connectionstring",
+    "patientname",
+    "mrn",
+    "accountnumber",
+    "rawprompt",
+    "rawresponse"
   ],
   "exclude_path_patterns": [
     "**/TC_*.xaml",

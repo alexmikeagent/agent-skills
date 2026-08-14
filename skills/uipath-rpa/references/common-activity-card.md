@@ -295,7 +295,7 @@ Snippets use the property-element form with `<VisualBasicValue>` / `<VisualBasic
 
 **Notes:** Prefer `LogMessage` over `WriteLine` for any output that must appear in Orchestrator. `Level` defaults to `Info`; omit only when you want `Info` and the explicit attribute clutters the snippet. Mature projects often use attribute form (`Level` + `Message` on the tag) with `DisplayName="Log Message - <what happened>"` — match the local anchor.
 
-**Storytelling + safety:** Log the transaction path (start purpose, branch chosen, side effect, fallback, final outcome). Prefer counts/booleans/reason codes over raw PHI, prompts, full comments, or queue IDs. `Info` = narrative; `Warn` = recoverable degraded path; `Error` = about to throw / system-exception mapping. Workflow `Error` logs are observability, not CLI failure (SKILL Rule 8a). See [xaml/xaml-edit-fast-path.md §3.2](xaml/xaml-edit-fast-path.md).
+**Storytelling + safety:** Log the transaction path (start purpose, branch chosen, side effect, fallback, final outcome). Prefer counts/booleans/reason codes over raw PHI, prompts, full comments, or queue IDs. `Info` = narrative; `Warn` = recoverable degraded path; `Error` = about to throw / system-exception mapping. Workflow `Error` logs are observability, not CLI failure. See [xaml/xaml-edit-fast-path.md §3.2](xaml/xaml-edit-fast-path.md).
 
 **Long-form:** [`activity-docs/UiPath.System.Activities/26.4/activities/LogMessage.md`](activity-docs/UiPath.System.Activities/26.4/activities/LogMessage.md)
 

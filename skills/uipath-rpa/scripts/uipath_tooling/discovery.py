@@ -88,6 +88,12 @@ def scoped_xaml(
         names.extend(
             _git_lines(
                 project_root,
+                ["diff", "--cached", "--name-only", "--diff-filter=ACMR", "--", "*.xaml"],
+            )
+        )
+        names.extend(
+            _git_lines(
+                project_root,
                 ["ls-files", "--others", "--exclude-standard", "--", "*.xaml"],
             )
         )

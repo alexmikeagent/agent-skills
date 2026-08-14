@@ -52,6 +52,48 @@ try {
     $hostProject = Join-Path $HostJobPath "project"
     Get-ChildItem -LiteralPath $hostProject -Force | Copy-Item -Destination $localProject -Recurse -Force
 
+    $manifestPath = Join-Path $localProject ".uipath-snapshot.json"
+    if (-not (Test-Path -LiteralPath $manifestPath)) {
+        Add-Finding "WIN011" "error" "Snapshot manifest is missing after transport." "compile"
+        $compileStatus = "blocked"
+        $exitCode = 2
+        throw "snapshot manifest missing"
+    }
+    $manifest = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
+    if ($manifest.schema -ne "uipath-project-snapshot/v1") {
+        Add-Finding "WIN012" "error" "Snapshot manifest schema is invalid." "compile"
+        $compileStatus = "blocked"
+        $exitCode = 2
+        throw "snapshot manifest schema invalid"
+    }
+    $localProjectPrefix = [IO.Path]::GetFullPath($localProject).TrimEnd([IO.Path]::DirectorySeparatorChar) + [IO.Path]::DirectorySeparatorChar
+    $manifestValid = $true
+    foreach ($entry in @($manifest.files)) {
+        $relativeValue = $entry.path -replace "/", [IO.Path]::DirectorySeparatorChar
+        $candidate = [IO.Path]::GetFullPath((Join-Path $localProject $relativeValue))
+        if (-not $candidate.StartsWith($localProjectPrefix, [StringComparison]::OrdinalIgnoreCase)) {
+            Add-Finding "WIN013" "error" ("Snapshot manifest path escapes project: " + $entry.path) "compile"
+            $manifestValid = $false
+            continue
+        }
+        if (-not (Test-Path -LiteralPath $candidate -PathType Leaf)) {
+            Add-Finding "WIN014" "error" ("Snapshot file is missing after transport: " + $entry.path) "compile"
+            $manifestValid = $false
+            continue
+        }
+        $actual = Get-Item -LiteralPath $candidate
+        $actualHash = (Get-FileHash -LiteralPath $candidate -Algorithm SHA256).Hash.ToLowerInvariant()
+        if ($actual.Length -ne [int64]$entry.bytes -or $actualHash -ne ([string]$entry.sha256).ToLowerInvariant()) {
+            Add-Finding "WIN015" "error" ("Snapshot file failed size/hash verification: " + $entry.path) "compile"
+            $manifestValid = $false
+        }
+    }
+    if (-not $manifestValid) {
+        $compileStatus = "blocked"
+        $exitCode = 2
+        throw "snapshot manifest verification failed"
+    }
+
     $projectJsonPath = Join-Path $localProject "project.json"
     if (-not (Test-Path -LiteralPath $projectJsonPath)) {
         Add-Finding "WIN002" "error" "Snapshot does not contain project.json." "compile"

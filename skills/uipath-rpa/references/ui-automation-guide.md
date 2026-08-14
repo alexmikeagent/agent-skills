@@ -10,6 +10,18 @@ Quick reference for UI automation in UiPath workflows — covers both coded work
 
 > **For full activity details:** check `{PROJECT_DIR}/.local/docs/packages/UiPath.UIAutomation.Activities/`.
 
+## Runtime state and replay boundary
+
+Model each interaction as `observed state -> action -> expected state/postcondition`. Ground transitions in same-session screenshots/video, selectors, and a loading sibling workflow; do not invent a universal Escape, Back, or function-key recovery path.
+
+Before retrying after an interruption, classify the stage:
+
+- **Pre-action / replayable:** the external action did not begin.
+- **Action unconfirmed:** application is unknown; inspect the target system before replay.
+- **Action confirmed:** suppress replay and resume at the first unfinished stage.
+
+After any recovery action, re-read the screen and verify the expected postcondition. A successful UI activity call alone is not state-transition proof.
+
 ---
 
 ## Pre-flight: Window Baseline

@@ -37,6 +37,7 @@ def load_policy(skill_root: Path, value: str | None) -> dict[str, Any]:
         "max_depth",
         "phi_sensitive_tokens",
         "phi_safe_markers",
+        "sensitive_tokens",
         "exclude_path_patterns",
     }
     unknown = sorted(set(policy) - allowed)
@@ -160,7 +161,12 @@ def validate_policy(workflow: WorkflowInfo, policy: dict[str, Any]) -> list[Find
             )
         )
 
-    sensitive = [token.lower() for token in policy.get("phi_sensitive_tokens", [])]
+    sensitive = [
+        token.lower()
+        for token in policy.get(
+            "sensitive_tokens", policy.get("phi_sensitive_tokens", [])
+        )
+    ]
     safe_markers = [marker.lower() for marker in policy.get("phi_safe_markers", [])]
     for element in workflow.root.iter():
         if local_name(element.tag) != "LogMessage":

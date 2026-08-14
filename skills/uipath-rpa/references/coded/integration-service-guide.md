@@ -1,6 +1,6 @@
 # Integration Service — Coded Workflow Reference
 
-Use `ConnectorConnection.ExecuteAsync` to call any Integration Service connector (Jira, Salesforce, ServiceNow, Slack, etc.) directly from a coded workflow — no drag-and-drop activities required.
+Use this page only for project-side coded connector serialization after `$uipath-genai-integration-service` has resolved connector choice, connection governance, metadata, and consumption. Confirm exact commands and members against installed package docs and live `uip is --help` before editing.
 
 > **Two IS connection patterns exist in coded workflows.** This file covers raw IS connectors (Jira, Salesforce, custom) via `CodedConnectorConfiguration` + `ISConnections.cs`. For first-party package connections (Office365, GSuite) that use the auto-generated `ConnectionsManager.cs` / `ConnectionsFactory.cs`, see [codedworkflow-reference.md § Integration Service Connections](codedworkflow-reference.md#integration-service-connections).
 
@@ -22,17 +22,13 @@ Use `ConnectorConnection.ExecuteAsync` to call any Integration Service connector
 
 ## How It Works
 
-The skill resolves all metadata up-front using the `uipath-platform` skill's Integration Service workflow (connector → connection → describe → execute). The coded workflow then receives the pre-resolved values and passes them to `ConnectorConnection.ExecuteAsync` — **no metadata lookup happens at runtime**.
+Resolve connector -> connection -> describe -> execute metadata up front with `$uipath-genai-integration-service`. The coded workflow then receives the pre-resolved values and passes them to the installed connector API; no metadata lookup should be added at runtime unless the project explicitly requires it.
 
 ---
 
 ## Required Package
 
-**Always include `UiPath.IntegrationService.Activities` with version >= 1.25.0** in `project.json` `dependencies`:
-
-```json
-"UiPath.IntegrationService.Activities": "[1.25.0,)"
-```
+Inspect the project's installed `UiPath.IntegrationService.Activities` dependency and its co-versioned docs. Package addition or upgrade is a consequential decision; obtain authorization rather than applying a version cached by this page.
 
 Add to the workflow file:
 
@@ -99,12 +95,9 @@ Typed handle to a specific IS connector + connection. Constructed by the auto-ge
    # → copy the "Id" field of the target connection
    ```
 
-### Step 1 — Resolve metadata using the uipath-platform skill
+### Step 1 — Resolve metadata with the Integration Service owner
 
-Before writing the coded workflow, resolve the connector metadata using the `uipath-platform` skill. The full CLI commands and output interpretation are covered in those reference files:
-
-- **Find connector key and list connections:** [connectors.md](../../../uipath-platform/references/integration-service/connectors.md) and [connections.md](../../../uipath-platform/references/integration-service/connections.md)
-- **Discover activities/resources and run describe:** [activities.md](../../../uipath-platform/references/integration-service/activities.md) and [resources.md](../../../uipath-platform/references/integration-service/resources.md)
+Before writing the coded workflow, invoke `$uipath-genai-integration-service` to resolve the connector and connection. Use `uip is --help` and the installed package's documentation to discover the current activities/resources and describe surface.
 
 The describe response tells you:
 

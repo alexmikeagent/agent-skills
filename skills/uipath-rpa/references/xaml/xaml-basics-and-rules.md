@@ -146,7 +146,7 @@ xmlns:upa="clr-namespace:UiPath.Process.Activities;assembly=UiPath.Process.Activ
 xmlns:upas="clr-namespace:UiPath.Process.Activities.Shared;assembly=UiPath.Process.Activities"
 ```
 
-These types ship in the **`UiPath.FlowchartBuilder.Activities`** package (runtime assembly `UiPath.Process.Activities`) — install before authoring (Common Rule 6). Not supported on `targetFramework: "Legacy"`. Package install, full node vocabulary, gateway patterns, suspend/resume: [long-running-workflow-guide.md](long-running-workflow-guide.md).
+These types ship in the **`UiPath.FlowchartBuilder.Activities`** package (runtime assembly `UiPath.Process.Activities`). Confirm the installed package and obtain approval before adding or upgrading it. Not supported on `targetFramework: "Legacy"`. Package install, full node vocabulary, gateway patterns, suspend/resume: [long-running-workflow-guide.md](long-running-workflow-guide.md).
 
 ```xml
 <upa:ProcessDiagram DisplayName="Long Running Workflow" sap2010:WorkflowViewState.IdRef="ProcessDiagram_1">

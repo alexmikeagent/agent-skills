@@ -178,7 +178,7 @@ C) <user-driven approach>
 
 ## Anti-Patterns (What NOT to Do)
 
-> Many of these reinforce SKILL.md Critical Rules. They are grouped by category for quick scanning.
+> These checks are grouped by category for quick scanning. The live project and installed package remain authoritative.
 
 ### Project & Code Structure
 

@@ -108,3 +108,35 @@ def test_registration_gate_fails_unregistered_tests(
     )
     assert completed.returncode == 1
     assert "[ERROR] META003" in completed.stdout
+
+
+def test_csharp_project_skips_visual_basic_expression_heuristics(
+    valid_project: Path, skill_root: Path
+) -> None:
+    project_path = valid_project / "project.json"
+    project = json.loads(project_path.read_text())
+    project["expressionLanguage"] = "CSharp"
+    project_path.write_text(json.dumps(project, indent=2) + "\n")
+    main = valid_project / "Main.xaml"
+    main.write_text(
+        main.read_text().replace("[1D]", '[Regex.IsMatch("x", "x") ? 1D : 0D]')
+    )
+    completed = _run(
+        skill_root, "audit", "--project", str(valid_project), "--scope", "all"
+    )
+    assert completed.returncode == 0, completed.stdout + completed.stderr
+    assert "VB003" not in completed.stdout
+
+
+def test_unknown_expression_language_is_reported(
+    valid_project: Path, skill_root: Path
+) -> None:
+    project_path = valid_project / "project.json"
+    project = json.loads(project_path.read_text())
+    project["expressionLanguage"] = "UnknownLanguage"
+    project_path.write_text(json.dumps(project, indent=2) + "\n")
+    completed = _run(
+        skill_root, "audit", "--project", str(valid_project), "--scope", "all"
+    )
+    assert completed.returncode == 0
+    assert "CFG001" in completed.stdout

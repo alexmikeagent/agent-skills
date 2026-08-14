@@ -16,7 +16,7 @@ Continue with this document only for **greenfield** workflows, **unknown activit
 4. **Start Minimal, Iterate to Correct** — Start one workflow at a time and break out logic into multiple files if needed. Build one activity at a time within each workflow. Write the smallest working XAML, then verify (see principle 5).
 5. **Verify After Every Change (host-aware)** — On a **signed-in Windows UiPath host**: **MUST** validate with **both** `uip rpa validate` and `uip rpa build`. `validate` clean alone is not validated — it does not catch unknown member names or invalid enum values; `build` does. On the **user's Mac** (default for this skill install): **do not** run those CLI commands; use the static gate in [xaml-edit-fast-path.md §7](xaml-edit-fast-path.md) and state that Windows compile validation remains outstanding.
 6. **Fix Errors by Category** — Triage in order: Package → Structure → Type → Activity Properties → Logic → Style/sidecar.
-7. **Studio-readable style is part of correctness** — Expanded Assigns, storytelling PHI-safe logs, unique `WorkflowViewState.IdRef`, Main sidecar JSON, and matching line endings. See SKILL Rules 25–26.
+7. **Studio-readable style is part of correctness** — Expanded Assigns, sensitive-data-safe narrative logs, unique `WorkflowViewState.IdRef`, active entry-point metadata, and matching line endings.
 
 ---
 
@@ -217,7 +217,7 @@ Do **not** run `uip rpa validate` / `build` / analyzer. Use [xaml-edit-fast-path
 
 ### Step 3.1: Check for Errors (Windows host only)
 
-Run both validators per iteration. `validate` catches structural / reference / analyzer issues; `build` catches member-name and enum-value mistakes that `validate` misses (e.g. `NGetText.Value` when the property is `Text`, `Operator="StartsWith"` when the enum has no such member). See [../validation-guide.md § Validation Iteration Loop](../validation-guide.md#validation-iteration-loop) for the canonical loop.
+Run the applicable static and compile gates per iteration. Build catches member-name and enum-value mistakes that source validation can miss (e.g. `NGetText.Value` when the property is `Text`, `Operator="StartsWith"` when the enum has no such member). See [../validation-guide.md § Fix loop](../validation-guide.md#fix-loop) for the canonical loop.
 
 ```bash
 uip rpa validate --file-path "Workflows/MyWorkflow.xaml" --output json

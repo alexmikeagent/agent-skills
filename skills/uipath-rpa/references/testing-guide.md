@@ -121,7 +121,7 @@ If the workflow has arguments, pass them in the `InvokeWorkflowFile.Arguments` d
 
 ### project.json Registration
 
-Register every XAML test case in `designOptions.fileInfoCollection` — this is **Common Rule 10** in SKILL.md and applies to both XAML and coded test cases. Test cases live **only** in `fileInfoCollection`, never in `entryPoints` — `entryPoints` is for executable workflow files in Process projects (e.g. `Main.xaml`), and test cases are not workflow entry points regardless of project type.
+Register every XAML test case in the active project test metadata, normally `designOptions.fileInfoCollection`. Test cases are not process entry points; verify the current project schema and a Studio-generated sibling rather than copying this example into a different project type.
 
 ```json
 {
@@ -141,13 +141,13 @@ Register every XAML test case in `designOptions.fileInfoCollection` — this is 
 
 **Required keys per entry:**
 
-- `editingStatus` — `"InProgress"` on creation; `"Publishable"` only on explicit user request (see lifecycle note below).
+- `editingStatus` — `"InProgress"` while the test is a draft; set `"Publishable"` when an authorized delivery/publish requires it.
 - `testCaseId` — fresh GUID, lowercase 8-4-4-4-12 hex (e.g. `2d81aebd-fbc1-4a66-8418-be77a34a3a21`). Generate via `[guid]::NewGuid()` in PowerShell or `uuidgen` on Unix.
 - `testCaseType` — `"TestCase"`.
 - `executionTemplateInvokeIsolated` — `false` unless the test runs under an execution template that requires isolation.
 - `fileName` — relative path of the `.xaml` or `.cs` test case file from the project root.
 
-> **`editingStatus` lifecycle:** Set to `"InProgress"` when creating a new test case. Update to `"Publishable"` only when the user explicitly asks to mark the test case as ready.
+> **`editingStatus` lifecycle:** Keep drafts `InProgress`. Before an authorized delivery or publish, confirm which changed tests must be `Publishable`; do not silently publish unfinished tests.
 
 ### What NOT to Do
 
