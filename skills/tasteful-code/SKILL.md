@@ -1,6 +1,6 @@
 ---
 name: tasteful-code
-description: Tasteful code for implementations, refactors, and reviews. Use when a user asks for readable, maintainable, idiomatic, proportionate, or less over-engineered code; load the TypeScript or Effect v4 appendix only for work in that ecosystem.
+description: Tasteful code for implementations, refactors, and reviews. Use when a user asks for readable, maintainable, idiomatic, proportionate, or less over-engineered code; load the TypeScript appendix only for TypeScript type or API work.
 ---
 
 # Tasteful Code
@@ -52,7 +52,7 @@ Defer function size, file size, line length, return count, DRY, dependency injec
 ## Language appendices
 
 - For TypeScript types, unions, or API design, read [references/typescript.md](references/typescript.md).
-- For Effect v4 code, first inspect the installed version and nearby imports, then read [references/effect-v4.md](references/effect-v4.md).
+- For Effect.ts, load `/effect`.
 
 ## Review-only requests
 

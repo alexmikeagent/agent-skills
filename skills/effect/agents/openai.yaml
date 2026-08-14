@@ -1,0 +1,4 @@
+interface:
+  display_name: "Effect"
+  short_description: "Design and implement Effect v4."
+  default_prompt: "Use $effect to design and implement this Effect v4 change."
