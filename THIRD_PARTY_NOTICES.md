@@ -24,6 +24,44 @@ The local modifications are documented in Git history.
   remote preview tooling with canonical Markdown, restricted MDX, and a local
   static renderer. No upstream executable code is retained.
 
+## Matt Pocock skills
+
+- Source: [mattpocock/skills](https://github.com/mattpocock/skills)
+- Tag: `v1.2.3`
+- Peeled commit: `6acc160e4e0cd062dbbbd7a1b26ae92855edf07e`
+- Imported promoted engineering skills: `ask-matt`, `code-review`,
+  `codebase-design`, `diagnosing-bugs`, `domain-modeling`, `grill-with-docs`,
+  `implement`, `improve-codebase-architecture`, `prototype`, `research`,
+  `resolving-merge-conflicts`, `setup-matt-pocock-skills`, `tdd`, `to-spec`,
+  `to-tickets`, `triage`, `wayfinder`, and `wizard`
+- Imported promoted productivity skills: `grill-me`, `grilling`, `handoff`,
+  `teach`, `to-questionnaire`, `wait-what`, and `writing-for-agents`
+- Local changes within imported packages: none. Each imported package is kept
+  byte-for-byte identical to its directory at the pinned upstream revision.
+- License: MIT
+
+MIT License
+
+Copyright (c) 2026 Matt Pocock
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
 ## MDX publishing runtime
 
 The `mdx-publish` skill pins these npm packages in `package-lock.json`:

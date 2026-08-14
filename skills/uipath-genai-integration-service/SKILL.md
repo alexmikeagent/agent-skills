@@ -26,7 +26,7 @@ Read [genai-activities.md](references/genai-activities.md) for GenAI selection a
 
 Read [screenplay.md](references/screenplay.md) whenever ScreenPlay is proposed or present. Use it for controlled agency at unstable or semantically difficult UI steps, not as an automatic replacement for stable selectors, APIs, or deterministic logic.
 
-For ordinary connectors, read [integration-service.md](references/integration-service.md), then follow the matching `uipath-rpa` Integration Service reference in full. Prefer API-level connector activities over UI automation when the external system exposes the required operation.
+For ordinary connectors, read [integration-service.md](references/integration-service.md), then use the project-side [UiPath RPA connector serialization reference](../uipath-rpa/references/is-connector-xaml-guide.md). Prefer API-level connector activities over UI automation when the external system exposes the required operation.
 
 Completion criterion: the selected activity has a documented capability match, compatibility match, connection path, output contract, and a stated reason it is preferable to a deterministic alternative.
 

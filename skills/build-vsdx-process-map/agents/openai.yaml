@@ -1,0 +1,4 @@
+interface:
+  display_name: "Build VSDX Process Maps"
+  short_description: "Trace and QA editable VSDX process maps"
+  default_prompt: "Use $build-vsdx-process-map to trace the source, build a readable process map, and validate the editable VSDX."
