@@ -15,7 +15,7 @@ export class CheckoutRequest extends Schema.Class<CheckoutRequest>("checkout/Che
 
 export const decodeCheckoutRequest = Schema.decodeUnknownEffect(CheckoutRequest)
 
-export class InvalidCheckoutRequest extends Schema.TaggedErrorClass<InvalidCheckoutRequest>()("InvalidCheckoutRequest", {
+export class InvalidCheckoutRequest extends Schema.TaggedError<InvalidCheckoutRequest>()("InvalidCheckoutRequest", {
   message: Schema.String
 }) {}
 
@@ -27,6 +27,8 @@ export const parseCheckoutRequest = Effect.fn("parseCheckoutRequest")((input: un
 ```
 
 Same type both ways: `Schema.Finite`, `Schema.Date`. Transforms: `FiniteFromString`, `DateFromString`. Filters via `.check(...)`. Structs are readonly.
+
+Inside Effect code, use `decodeUnknownEffect`; use `decodeUnknownResult`, `decodeUnknownPromise`, or `decodeUnknownSync` only when that execution boundary calls for it. There is no plain v4 RC `Schema.decodeUnknown`. Use `Schema.TaggedStruct("Tag", fields)` when `_tag` is part of the contract instead of rebuilding it manually.
 
 ## Reach for Schema
 

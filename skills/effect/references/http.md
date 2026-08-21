@@ -13,7 +13,7 @@
 import { Context, Effect, Layer, Schema } from "effect"
 import { FetchHttpClient, HttpClient, HttpClientRequest, HttpClientResponse } from "effect/unstable/http"
 
-export class PaymentsUnavailable extends Schema.TaggedErrorClass<PaymentsUnavailable>()("PaymentsUnavailable", {
+export class PaymentsUnavailable extends Schema.TaggedError<PaymentsUnavailable>()("PaymentsUnavailable", {
   cause: Schema.Defect()
 }) {}
 
@@ -40,6 +40,8 @@ export class Payments extends Context.Service<Payments, {
   ).pipe(Layer.provide(FetchHttpClient.layer))
 }
 ```
+
+Use a deliberate status policy such as `HttpClient.filterStatusOk` before schema-decoding the body. Raw `fetch` plus unchecked `response.json()` collapses transport, status, and decode failures into an untyped boundary.
 
 ## Server
 

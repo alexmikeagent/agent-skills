@@ -7,12 +7,12 @@ Expected business failures live in `E`. Defects stay out of `E`. Recover only wh
 ```ts
 import { Effect, Schema } from "effect"
 
-export class PaymentDeclined extends Schema.TaggedErrorClass<PaymentDeclined>()("PaymentDeclined", {
+export class PaymentDeclined extends Schema.TaggedError<PaymentDeclined>()("PaymentDeclined", {
   orderId: Schema.String,
   reason: Schema.String
 }) {}
 
-export class InsufficientInventory extends Schema.TaggedErrorClass<InsufficientInventory>()("InsufficientInventory", {
+export class InsufficientInventory extends Schema.TaggedError<InsufficientInventory>()("InsufficientInventory", {
   sku: Schema.String
 }) {}
 ```
@@ -45,6 +45,8 @@ const charge = Effect.fn("Payments.charge")(function*(orderId: string) {
 
 Unexpected decode or driver failures that this service cannot explain become defects (`Effect.orDie`, `Effect.die`) so the interface stays domain-shaped.
 
+Use `Effect.catchTags` for tag-directed recovery across a union. Use `Effect.mapError` for a pure one-to-one error conversion; a catch that only fails again hides that intent. `Data.TaggedError` remains valid for a local error that does not need a Schema contract.
+
 ## Channel
 
 - `Effect.fail` / yieldable tagged errors → typed `E`
@@ -52,4 +54,4 @@ Unexpected decode or driver failures that this service cannot explain become def
 - `Effect.result` lifts typed `E` into `Result`
 - `Effect.exit` preserves the full `Cause`
 
-t3code and OpenCode use `Schema.TaggedErrorClass` for new surfaces. `LLMS.md` still shows `Schema.TaggedError`. Match nearby code; verify the installed constructor.
+Current v4 RC uses `Schema.TaggedError`; `Schema.TaggedErrorClass` is not exported. Verify the installed constructor because RC surfaces move.

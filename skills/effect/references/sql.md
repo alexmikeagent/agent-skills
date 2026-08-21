@@ -25,7 +25,7 @@ export class Order extends Model.Class<Order>("Order")({
   createdAt: Model.DateTimeInsert
 }) {}
 
-export class OrderNotFound extends Schema.TaggedErrorClass<OrderNotFound>()("OrderNotFound", {
+export class OrderNotFound extends Schema.TaggedError<OrderNotFound>()("OrderNotFound", {
   id: OrderId
 }) {}
 
@@ -63,5 +63,7 @@ export class Orders extends Context.Service<Orders, {
 ```
 
 Provide the driver + migrator under `Orders.layer`. Swap Postgres / SQLite by swapping that driver layer only.
+
+For extra queries, prefer `SqlSchema.findOne` / `findOneOption` when zero rows are possible. Choose the empty-result policy explicitly and map it to the domain error; decoding `rows[0] ?? null` as a non-null model confuses absence with malformed data.
 
 Migrations are ordered effects. Prefer files on disk over an inline record in production.

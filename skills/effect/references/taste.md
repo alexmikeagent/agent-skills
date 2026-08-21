@@ -15,6 +15,10 @@ import * as Schema from "effect/Schema"
 
 OpenCode and `LLMS.md` often use the `effect` barrel. Do not convert a barrel repo to namespaces, or the reverse, as a drive-by.
 
+## Named work
+
+Use `Effect.fn("Qualified.name")` for reusable effectful work when the trace and stack boundary earns its name. Keep constants and single expressions direct. In generators, yield Effects directly rather than using the old `_` adapter, and `return yield*` when raising an expected error. Use `Effect.fnUntraced` deliberately for hot internal paths.
+
 ## Contract module
 
 RPC payloads, domain schemas, and tagged errors that cross a process live in a shareable module (`packages/contracts`). Server and client import that module. A client never imports a handler file.
@@ -68,6 +72,10 @@ JS, plugin, and callback boundaries capture the current `Context.Reference`s (in
 ## Time, JSON, IDs
 
 `Clock.currentTimeMillis` / `DateTime.now` — tests freeze `TestClock`. `Schema.encodeUnknownSync` / `decodeUnknownSync` at JSON edges. Branded ids through `Schema.make`, not `makeUnsafe`.
+
+## Observability
+
+Use `Effect.log*`, annotations, and spans inside Effect code. Keep `console` output at a deliberate application edge rather than using it as domain observability.
 
 ## Config
 

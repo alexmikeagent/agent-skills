@@ -1,6 +1,6 @@
 ---
 name: effect
-description: Effect v4 design and implementation. Use when writing Effect.ts, Context.Service, Layer, Schema, tagged errors, Effect.gen, Effect.fn, or effect/unstable HTTP, SQL, RPC, Cluster, AI, or Atom.
+description: Effect v4 design and implementation. Use when writing Effect.ts, Context.Service, Layer, Schema.TaggedError, Effect.gen, Effect.fn, or effect/unstable HTTP, SQL, RPC, Cluster, AI, or Atom.
 ---
 
 # Effect
@@ -33,7 +33,7 @@ State success `A`, expected errors `E`, and required services `R` in one sentenc
 
 ## 4. Implement
 
-Match the repo's import style. Write named work with `Effect.fn("Service.method")` and a short `gen` when names clarify the story. `return yield*` on failure. Compose layers, then provide once. Start sequential. Time through `Clock` / `DateTime`. JSON through `Schema`. IDs through branded `make`. Use `Predicate` instead of hand-rolled type guards. Handlers and UI stay thin — decode, call a service, map `_tag`. Re-enter Effect at JS/callback edges through a captured runtime, not a global. Process entry is `NodeRuntime.runMain`, `BunRuntime.runMain`, `Layer.launch`, or `ManagedRuntime`.
+Match the repo's import style. Write reusable, named work with `Effect.fn("Service.method")`; keep a single expression direct and use a short `gen` when it clarifies a multi-step story. Yield Effects directly, without the old generator adapter. `return yield*` on failure. Compose layers, then provide once. Start sequential. Time through `Clock` / `DateTime`. JSON through `Schema`. IDs through branded `make`. Use `Predicate` instead of hand-rolled type guards. Use structured Effect logs and spans inside Effect code. Handlers and UI stay thin — decode, call a service, map `_tag`. Re-enter Effect at JS/callback edges through a captured runtime, not a global. Process entry is `NodeRuntime.runMain`, `BunRuntime.runMain`, `Layer.launch`, or `ManagedRuntime`.
 
 **Complete when:** the program type shows the intended `A`, `E`, and `R`.
 
@@ -48,6 +48,9 @@ Test through the service interface or a test layer. Prefer `@effect/vitest` when
 | Reach for | Instead of |
 | --- | --- |
 | `Context.Service` + `static readonly layer` | `Context.Tag`, `Effect.Service`, `.Default` |
+| Explicit `Layer.effect` + `Layer.provide` | service `dependencies` options |
+| `Schema.TaggedError` at schema boundaries | `Schema.TaggedErrorClass` |
+| `Schema.decodeUnknownEffect` in Effect code | `Schema.decodeUnknown` or throwing sync decode in a generator |
 | `Effect.catch` / `catchCause` / `catchDefect` | `catchAll` / `catchAllCause` / `catchAllDefect` |
 | `Result` | `Either` |
 | `Effect.forkChild` / `forkDetach` | `Effect.fork` / `forkDaemon` |

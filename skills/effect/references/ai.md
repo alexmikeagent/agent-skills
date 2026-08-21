@@ -19,7 +19,7 @@ export class FraudReview extends Schema.Class<FraudReview>("checkout/FraudReview
   reason: Schema.NonEmptyString
 }) {}
 
-export class ReviewFailed extends Schema.TaggedErrorClass<ReviewFailed>()("ReviewFailed", {
+export class ReviewFailed extends Schema.TaggedError<ReviewFailed>()("ReviewFailed", {
   reason: AiError.AiErrorReason
 }) {}
 
@@ -58,3 +58,5 @@ export class FraudAnalyst extends Context.Service<FraudAnalyst, {
 ```
 
 Tools: define with Schema, group into a toolkit, pass to `generateText`. Multi-provider fallback is `ExecutionPlan`, not a home-rolled retry loop. Verify model names and `captureRequirements` against the installed provider package.
+
+Prefer provider-neutral `LanguageModel.generateText` / `generateObject` / `streamText`. Inspect the installed low-level OpenAI client before using it; current v4 RC exposes Responses API operations rather than `OpenAiClient.chat`, and the exact provider surface is version-sensitive.

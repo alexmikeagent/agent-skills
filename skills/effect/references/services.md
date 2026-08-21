@@ -2,6 +2,8 @@
 
 Structure behaviour as services. The id is package path plus file path. The live layer lives on the class.
 
+V4 uses `Context.Service`, not v3 `Effect.Service`. Generated `.Default` layers and service `dependencies` options are gone; construct `Layer.effect` explicitly and satisfy its requirements with `Layer.provide` / `Layer.provideMerge`.
+
 ## Shape
 
 ```ts

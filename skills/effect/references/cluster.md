@@ -43,6 +43,8 @@ export const CheckoutEntityLayer = CheckoutEntity.toLayer(
 
 Clients: `yield* CheckoutEntity.client`, then `clientFor(orderId)`. Messages are volatile unless annotated persisted. Handlers on one entity run sequentially unless a handler is `Rpc.fork`.
 
+Persistence annotations still require a real message-storage layer. Use `Rpc.fork` only when overlapping handlers preserve the entity's invariants.
+
 ## Run
 
 - Production: platform cluster layer (`NodeClusterSocket.layer` or HTTP equivalent) + entity layers + `Layer.launch`

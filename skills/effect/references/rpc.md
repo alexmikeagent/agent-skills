@@ -10,6 +10,8 @@ Typed request/response between processes, workers, or Cluster entities. HTTP JSO
 
 Define the contract once in a shareable module. Handlers and clients both import that module — never the handler file from a client. Authorize per method, not per socket. The session performs one attempt; retry lives in a supervisor. Map RPC `_tag`s to domain errors at that edge.
 
+Give payload, success, and expected errors concrete Schemas. `Schema.Unknown` is an escape hatch, not a typed protocol.
+
 ```ts
 import { Effect, Layer, Schema } from "effect"
 import { Rpc, RpcGroup, RpcServer } from "effect/unstable/rpc"

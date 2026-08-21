@@ -20,7 +20,7 @@ export type CheckoutEvent =
   | { readonly _tag: "PaymentSucceeded"; readonly paymentId: string }
   | { readonly _tag: "PaymentFailed"; readonly reason: string }
 
-export class IllegalCheckoutTransition extends Schema.TaggedErrorClass<IllegalCheckoutTransition>()(
+export class IllegalCheckoutTransition extends Schema.TaggedError<IllegalCheckoutTransition>()(
   "IllegalCheckoutTransition",
   {
     from: Schema.String,
@@ -91,3 +91,5 @@ export class Checkout extends Context.Service<Checkout, {
 ```
 
 XState is out of scope unless the target repo already uses it.
+
+Current v4 RC does not export `effect/unstable/machine`. Verify later RCs before choosing a first-party statechart API; until then, use the explicit transition shape above or Cluster `Entity` for distributed ownership.
