@@ -7,7 +7,9 @@ description: Effect v4 design and implementation. Use when writing Effect.ts, Co
 
 Inspect installed `effect`, then design and implement. `/implement` and `/tasteful-code` own the work loop. This skill owns Effect shape. For seam/adapter language, `/codebase-design`.
 
-APIs come from the installed package and its `LLMS.md` / `AGENTS.md`. Shapes here are illustrative — verify constructors against the installed major.
+APIs come from the installed package and its `LLMS.md` / `AGENTS.md`. Shapes here are illustrative — verify constructors against the installed major. Traps table last verified against `effect@4.0.0-rc.111`.
+
+If `/implement`, `/tasteful-code`, or `/codebase-design` are not installed, apply this skill's `references/taste.md` and work the steps below directly.
 
 ## 1. Inspect
 
@@ -41,7 +43,7 @@ Match the repo's import style. Write reusable, named work with `Effect.fn("Servi
 
 Test through the service interface or a test layer. Prefer `@effect/vitest` when the repo has it. Run `@effect/tsgo` diagnostics when they are installed.
 
-**Complete when:** a test would fail if the contract broke.
+**Complete when:** a test would fail if the contract broke. Patterns: [references/testing.md](references/testing.md)
 
 ## Traps → v4
 
@@ -74,3 +76,4 @@ Open only the branch the task hits. Unstable modules may still break in minors.
 - Distributed entities: [references/cluster.md](references/cluster.md)
 - Language models: [references/ai.md](references/ai.md)
 - Frontend atoms: [references/atom.md](references/atom.md)
+- Testing and test layers: [references/testing.md](references/testing.md)
